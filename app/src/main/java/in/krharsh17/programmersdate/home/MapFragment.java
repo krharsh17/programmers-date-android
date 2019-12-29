@@ -1,4 +1,4 @@
-package in.krharsh17.programmersdate;
+package in.krharsh17.programmersdate.home;
 
 
 import android.content.res.Resources;
@@ -38,6 +38,9 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 import java.util.Locale;
+
+import in.krharsh17.programmersdate.Constants;
+import in.krharsh17.programmersdate.R;
 
 /**
  * A simple {@link Fragment} subclass.
