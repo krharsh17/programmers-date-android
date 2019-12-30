@@ -7,6 +7,8 @@ public interface Constants {
     int mapDefaultHeight = 14;
     String TAG = "DEFAULT";
 
+    String sharedPrefName = "PDate";
+
     LatLng tennisCourt = new LatLng(25.620952, 85.172708);
     LatLng mainBuilding = new LatLng(25.620737, 85.171954);
     LatLng libraryNescafe = new LatLng(25.620737, 85.171581);
