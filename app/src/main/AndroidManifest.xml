@@ -18,18 +18,18 @@
         <activity android:name=".events.BarActivity" />
         <activity android:name=".events.QRActivity" />
         <activity android:name=".events.LogoActivity" />
-        <activity android:name=".splash.SplashActivity" />
+        <activity android:name=".splash.SplashActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity android:name=".home.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
