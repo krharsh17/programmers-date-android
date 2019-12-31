@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.MapFragment">
+    tools:context=".home.Map">
     <com.google.android.gms.maps.MapView android:id="@+id/main_mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

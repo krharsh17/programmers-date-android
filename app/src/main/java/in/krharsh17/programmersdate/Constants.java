@@ -1,6 +1,7 @@
 package in.krharsh17.programmersdate;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public interface Constants {
 
@@ -27,5 +28,9 @@ public interface Constants {
     LatLng carParking = new LatLng(25.620933, 85.171512);
     LatLng mainGate = new LatLng(25.620307, 85.171928);
     LatLng cellTower = new LatLng(25.620655, 85.173690);
+
+    LatLngBounds NITP_BOUNDS = new LatLngBounds(new LatLng(25.619097, 85.170036),
+            new LatLng(25.621264, 85.175347));
+
 
 }
