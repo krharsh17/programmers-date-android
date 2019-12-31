@@ -1,5 +1,7 @@
 package in.krharsh17.programmersdate.home;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -7,13 +9,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import in.krharsh17.programmersdate.SharedPreferencesManager;
+import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.models.Team;
 
 public class TeamManager {
 
     Team team;
-    String id = new SharedPreferencesManager().getID();
+    String id;
+
+    public TeamManager(Context context){
+        id = new SharedPrefManager(context).getTeamId();
+    }
 
     public Team getTeam(){
 
