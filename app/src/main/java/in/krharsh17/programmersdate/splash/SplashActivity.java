@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,22 +63,13 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         logo.animate().alpha(1).setDuration(600).setStartDelay(400);
     }
 
+    @SuppressLint("RestrictedApi")
     private void run() {
         if (SharedPrefManager.isLoggedIn(SplashActivity.this)) {
             proceedToHome();
         } else {
-            ConstraintSet parentSet = new ConstraintSet();
-            parentSet.clone(parent);
-
-            parentSet.constrainPercentHeight(logoBackground.getId(), 0.5f);
-//            parentSet.constrainPercentWidth(logoBackground.getId(), 0.5f);
-
-            parentSet.setVerticalBias(heading.getId(), 0.15f);
-
-            parentSet.applyTo(parent);
-
             roll.setVisibility(View.VISIBLE);
-            next.animate().alpha(1f).setDuration(400);
+            next.setVisibility(View.VISIBLE);
         }
     }
 
