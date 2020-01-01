@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.models.Level;
@@ -41,7 +40,6 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-
         ViewHolder(@NonNull View itemView) {
             super(itemView);
         }

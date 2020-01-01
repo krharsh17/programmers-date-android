@@ -33,4 +33,14 @@ public interface Constants {
             new LatLng(25.621264, 85.175347));
 
 
+    String helpTextPose = "Strike the given pose together with your partner and get it captured to ace this round!";
+    String helpTextQR = "Find a hidden QR code in the marked areas!";
+    String helpTextBar = "Find a hidden bar code in the show areas!";
+    String helpTextLogo = "Find a popular logo in the set areas!";
+
+    String taskTypeLogo = "LOGO";
+    String taskTypeQR = "QR";
+    String taskTypeBar = "BAR";
+    String taskTypePose = "POSE";
+    String taskTypeTwister = "TWISTER";
 }
