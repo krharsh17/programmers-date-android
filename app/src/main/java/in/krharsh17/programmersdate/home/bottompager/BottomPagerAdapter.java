@@ -10,7 +10,7 @@ public class BottomPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<DetailFragment> fragments;
 
-    BottomPagerAdapter(FragmentManager fm) {
+    public BottomPagerAdapter(FragmentManager fm) {
         super(fm);
         fragments = new ArrayList<>();
     }
