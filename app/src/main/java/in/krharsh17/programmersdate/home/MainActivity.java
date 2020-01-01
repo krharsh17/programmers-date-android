@@ -1,19 +1,26 @@
 package in.krharsh17.programmersdate.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     Map map;
+    ViewPager bottomPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +37,36 @@ public class MainActivity extends AppCompatActivity {
 
     void init() {
         map = new Map();
+        bottomPager = findViewById(R.id.bottom_pager);
     }
+
 
     void run() {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.main_frame, map)
                 .commit();
+        setupBottomPager();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    void setupBottomPager() {
+
+        bottomPager.setAdapter(new BottomPagerAdapter(getSupportFragmentManager()));
+
+        bottomPager.setPadding(
+                (Math.round(getResources().getDisplayMetrics().widthPixels - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 288, getResources().getDisplayMetrics())) / 2),
+                0,
+                Math.round(getResources().getDisplayMetrics().widthPixels - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 288, getResources().getDisplayMetrics())) / 2,
+                0);
+        bottomPager.setClipToPadding(false);
+
+        bottomPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+
     }
 
     @Override
