@@ -100,8 +100,8 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
 
     public void addLandmark(LatLng location, int drawableRes) {
         MarkerOptions markerOptions = new MarkerOptions();
-        Bitmap bitmap;
-        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), drawableRes), 36, 36, false);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), drawableRes);
+        Bitmap bitmap = Bitmap.createScaledBitmap(originalBitmap, originalBitmap.getWidth() / 2, originalBitmap.getHeight() / 2, false);
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
         markerOptions.position(location);
         markerOptions.anchor(0.5f, 0.5f);
@@ -142,6 +142,9 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
         animateMarkers();
 
         focusMap(mainBuilding);
+
+        addLandmark(tennisCourt, R.drawable.marker_tennis);
+        addLandmark(carParking, R.drawable.marker_parking);
     }
 
     @Override
@@ -236,7 +239,7 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
                     partnerMarkerOption.position(partnerLocation);
                 }
             }
-            refreshMarkers();
+            showPlayerLocationMarkers();
         }
     }
 
@@ -316,6 +319,10 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
 
     private void showPlayerLocationMarkers() {
         if (map != null) {
+            if (myMarker != null)
+                myMarker.remove();
+            if (partnerMarker != null)
+                partnerMarker.remove();
             if (myMarkerOption != null)
                 myMarker = map.addMarker(myMarkerOption);
             if (partnerMarkerOption != null)
