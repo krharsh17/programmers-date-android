@@ -1,7 +1,9 @@
 package in.krharsh17.programmersdate.home;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.Slide;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.events.QRActivity;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         run();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(MainActivity.this, QRActivity.class));
+            }
+        }, 2000);
 
     }
 
