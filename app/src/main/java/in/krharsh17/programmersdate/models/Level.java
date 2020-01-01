@@ -20,4 +20,9 @@ public class Level {
     public void setTaskType(String taskType) {
         this.taskType = taskType;
     }
+
+    public Level(int levelNumber, String taskType){
+        this.levelNumber = levelNumber;
+        this.taskType = taskType;
+    }
 }

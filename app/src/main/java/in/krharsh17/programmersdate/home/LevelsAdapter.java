@@ -1,6 +1,8 @@
 package in.krharsh17.programmersdate.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,22 +81,43 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
     }
 
     public void setLocked(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("Level "+level.getLevelNumber());
-        viewHolder.levelIcon.setImageResource(R.drawable.app_logo_background);
-        viewHolder.levelText.getBackground().setAlpha(50);
-        viewHolder.levelIcon.getBackground().setAlpha(50);
+        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
+        viewHolder.levelIcon.setImageResource(R.drawable.level_locked_icon);
+        viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
     }
 
     public void setUnlocked(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("Level "+level.getLevelNumber());
-        viewHolder.levelText.getBackground().setAlpha(100);
-        viewHolder.levelIcon.getBackground().setAlpha(100);
+        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
+        if(level.getTaskType().equals("POSE")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_pose_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        }else if (level.getTaskType().equals("BAR")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_bar_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        }else if (level.getTaskType().equals("QR")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_qr_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        }else if (level.getTaskType().equals("LOGO")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_logo_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        }
     }
 
     public void setCompleted(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("Level "+level.getLevelNumber());
-        viewHolder.levelText.getBackground().setAlpha(50);
-        viewHolder.levelIcon.getBackground().setAlpha(50);
+        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
+        if(level.getTaskType().equals("POSE")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_pose_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        }else if (level.getTaskType().equals("BAR")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_bar_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        }else if (level.getTaskType().equals("QR")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_qr_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        }else if (level.getTaskType().equals("LOGO")){
+            viewHolder.levelIcon.setImageResource(R.drawable.level_logo_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        }
     }
 
     public void levelSetter(int newLevel){

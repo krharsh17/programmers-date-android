@@ -19,18 +19,20 @@ public class LocationManager {
 
     LatLng latLng;
     Context context;
+    long rollNo;
 
     public LocationManager(Context context){
         this.context = context;
+        rollNo = new SharedPrefManager(context).getRollNumber();
     }
 
 
     public LatLng fetchPartnerCoordinates(){
-        FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player1Roll").startAt(1806172).endAt(1806172).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player1Roll").startAt(rollNo).endAt(rollNo).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
-                    FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player2Roll").startAt(1806199).endAt(1806199).
+                    FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player2Roll").startAt(rollNo).endAt(rollNo).
                             addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
