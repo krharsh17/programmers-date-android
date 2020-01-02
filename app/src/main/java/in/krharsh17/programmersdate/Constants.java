@@ -1,6 +1,7 @@
 package in.krharsh17.programmersdate;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 public interface Constants {
 
@@ -28,4 +29,18 @@ public interface Constants {
     LatLng mainGate = new LatLng(25.620307, 85.171928);
     LatLng cellTower = new LatLng(25.620655, 85.173690);
 
+    LatLngBounds NITP_BOUNDS = new LatLngBounds(new LatLng(25.619097, 85.170036),
+            new LatLng(25.621264, 85.175347));
+
+
+    String helpTextPose = "Strike the given pose together with your partner and get it captured to ace this round!";
+    String helpTextQR = "Find a hidden QR code in the marked areas!";
+    String helpTextBar = "Find a hidden bar code in the show areas!";
+    String helpTextLogo = "Find a popular logo in the set areas!";
+
+    String taskTypeLogo = "LOGO";
+    String taskTypeQR = "QR";
+    String taskTypeBar = "BAR";
+    String taskTypePose = "POSE";
+    String taskTypeTwister = "TWISTER";
 }

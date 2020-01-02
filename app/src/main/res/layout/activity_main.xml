@@ -6,21 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/levels_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="108dp"
-        android:background="@color/colorPrimaryDark"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:reverseLayout="true" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main_frame"
         />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/bottom_pager"
+        android:layout_width="match_parent"
+        android:layout_height="188dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
