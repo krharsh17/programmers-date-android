@@ -1,4 +1,4 @@
-package in.krharsh17.programmersdate.home;
+package in.krharsh17.programmersdate.home.managers;
 
 import android.content.Context;
 
@@ -13,7 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.SharedPrefManager;
-import in.krharsh17.programmersdate.models.Team;
+import in.krharsh17.programmersdate.models.Couple;
 
 public class LocationManager {
 
@@ -37,9 +37,9 @@ public class LocationManager {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if(dataSnapshot.exists()){
-                                        Team team = dataSnapshot.getValue(Team.class);
-                                        new SharedPrefManager(context).setTeamId(team.getId());
-                                        ArrayList<Double> partnerLocation = team.getPlayer1Location();
+                                        Couple couple = dataSnapshot.getValue(Couple.class);
+                                        new SharedPrefManager(context).setTeamId(couple.getId());
+                                        ArrayList<Double> partnerLocation = couple.getPlayer1Location();
                                         latLng = new LatLng(partnerLocation.get(0),partnerLocation.get(1));
                                      }
                                 }
@@ -50,8 +50,8 @@ public class LocationManager {
                                 }
                             });
                 }else {
-                    Team team = dataSnapshot.getValue(Team.class);
-                    ArrayList<Double> partnerLocation = team.getPlayer2Location();
+                    Couple couple = dataSnapshot.getValue(Couple.class);
+                    ArrayList<Double> partnerLocation = couple.getPlayer2Location();
                     latLng = new LatLng(partnerLocation.get(0),partnerLocation.get(1));
                 }
             }
