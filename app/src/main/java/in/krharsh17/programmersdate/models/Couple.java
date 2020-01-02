@@ -2,16 +2,25 @@ package in.krharsh17.programmersdate.models;
 
 import java.util.ArrayList;
 
-public class Team  {
+public class Couple {
 
     private String id;
     private String player1Name;
     private String player2Name;
     private int player1Roll;
     private int player2Roll;
-    private int teamLevel;
+    private int currentLevel;
     private ArrayList<Double> player1Location;
     private ArrayList<Double> player2Location;
+    private ArrayList<Level> levels;
+
+    public ArrayList<Level> getLevels() {
+        return levels;
+    }
+
+    public void setLevels(ArrayList<Level> levels) {
+        this.levels = levels;
+    }
 
     public String getId() {
         return id;
@@ -53,12 +62,12 @@ public class Team  {
         this.player2Roll = player2Roll;
     }
 
-    public int getTeamLevel() {
-        return teamLevel;
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
-    public void setTeamLevel(int teamLevel) {
-        this.teamLevel = teamLevel;
+    public void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
     }
 
     public ArrayList<Double> getPlayer1Location() {
