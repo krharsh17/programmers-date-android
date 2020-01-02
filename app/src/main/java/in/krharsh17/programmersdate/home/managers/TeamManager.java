@@ -10,23 +10,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import in.krharsh17.programmersdate.SharedPrefManager;
-import in.krharsh17.programmersdate.models.Team;
+import in.krharsh17.programmersdate.models.Couple;
 
 public class TeamManager {
 
-    Team team;
+    Couple couple;
     String id;
 
     public TeamManager(Context context){
         id = new SharedPrefManager(context).getTeamId();
     }
 
-    public Team getTeam(){
+    public Couple getCouple() {
 
         FirebaseDatabase.getInstance().getReference().child("Couples").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                team = dataSnapshot.getValue(Team.class);
+                couple = dataSnapshot.getValue(Couple.class);
             }
 
             @Override
@@ -35,7 +35,7 @@ public class TeamManager {
             }
         });
 
-        return this.team;
+        return this.couple;
     }
 
 }
