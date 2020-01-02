@@ -28,6 +28,11 @@ public class Level {
         this.taskType = taskType;
     }
 
+    public Level(int levelNumber, String taskType) {
+        this.levelNumber = levelNumber;
+        this.taskType = taskType;
+    }
+
     public ArrayList<ArrayList<Double>> getLocations() {
         return locations;
     }
