@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
+import in.krharsh17.programmersdate.home.managers.LevelManager;
 import in.krharsh17.programmersdate.models.Level;
 
 public class MainActivity extends AppCompatActivity {
@@ -93,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
         levelRecycler.setAdapter(new LevelsAdapter(this, levels, 3));
         linearLayoutManagerThree.startSmoothScroll(smoothScroller);
         checkCurrentPosition();
+
+        LevelManager.createGame(this);
+//        Couple couple = new Couple();
+//        couple.setId("c1");
+//        couple.setPlayer1Name("Kumar Harsh");
+//        couple.setPlayer2Name("Parth Sharma");
+//        couple.setPlayer1Roll(1806130);
+//        couple.setPlayer2Roll(1806172);
+//        couplesRef.child(couple.getId()).setValue(couple);
     }
 
     @SuppressLint("ClickableViewAccessibility")

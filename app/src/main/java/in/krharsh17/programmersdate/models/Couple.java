@@ -1,5 +1,8 @@
 package in.krharsh17.programmersdate.models;
 
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 public class Couple {
@@ -84,5 +87,9 @@ public class Couple {
 
     public void setPlayer2Location(ArrayList<Double> player2Location) {
         this.player2Location = player2Location;
+    }
+
+    public static LatLng getLatLng(ArrayList<Double> coords) {
+        return new LatLng(coords.get(0), coords.get(1));
     }
 }

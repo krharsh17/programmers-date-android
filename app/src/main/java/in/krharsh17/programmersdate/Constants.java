@@ -2,6 +2,8 @@ package in.krharsh17.programmersdate;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public interface Constants {
 
@@ -43,4 +45,8 @@ public interface Constants {
     String taskTypeBar = "BAR";
     String taskTypePose = "POSE";
     String taskTypeTwister = "TWISTER";
+
+    DatabaseReference couplesRef = FirebaseDatabase.getInstance().getReference().child("couples");
+    DatabaseReference tasksRef = FirebaseDatabase.getInstance().getReference().child("tasks");
+
 }
