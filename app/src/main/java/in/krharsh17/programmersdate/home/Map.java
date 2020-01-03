@@ -36,8 +36,6 @@ import java.util.Objects;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
-import in.krharsh17.programmersdate.home.managers.CoupleManager;
-import in.krharsh17.programmersdate.home.managers.LocationManager;
 
 
 public class Map extends Fragment implements OnMapReadyCallback, Constants {
@@ -194,33 +192,14 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 myLocation = locationResult.getLastLocation();
-                if (myLocation != null) {
+                if (myLocation != null)
                     focusMap(myLocation.getLatitude(), myLocation.getLongitude());
-                    new LocationManager(getContext()).writeUserLocation(myLocation.getLatitude(), myLocation.getLongitude());
-                }
                 showPresentLocations();
             }
         };
-
-        attachPartnerLocationListener();
         enableGPS();
         markerOptions = new MarkerOptions[20];
         markers = new Marker[20];
-    }
-
-    void attachPartnerLocationListener() {
-        new LocationManager(getContext()).fetchPartnerLocation().setOnLocationChangeListener(new LocationManager.OnLocationChangeListener() {
-            @Override
-            public void onLocationChanged(LatLng partnerNewLocation) {
-                partnerLocation = partnerNewLocation;
-            }
-
-            @Override
-            public void onErrorOccured(String error) {
-                partnerLocation = null;
-                CoupleManager.syncWithServer(getActivity());
-            }
-        });
     }
 
     void enableGPS() {

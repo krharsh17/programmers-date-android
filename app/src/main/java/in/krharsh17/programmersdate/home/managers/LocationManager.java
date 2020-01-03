@@ -1,13 +1,13 @@
 package in.krharsh17.programmersdate.home.managers;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -15,96 +15,75 @@ import java.util.ArrayList;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.models.Couple;
 
-import static com.android.volley.VolleyLog.TAG;
-import static in.krharsh17.programmersdate.Constants.couplesRef;
-
 public class LocationManager {
 
     LatLng latLng;
     Context context;
     long rollNo;
-    OnLocationChangeListener onLocationChangeListener;
 
-    public LocationManager(Context context) {
+    public LocationManager(Context context){
         this.context = context;
         rollNo = new SharedPrefManager(context).getRollNumber();
     }
 
-    public void setOnLocationChangeListener(OnLocationChangeListener onLocationChangeListener) {
-        this.onLocationChangeListener = onLocationChangeListener;
-    }
 
-    public LocationManager fetchPartnerLocation() {
-        final String id = new SharedPrefManager(context).getCoupleId();
-        final int index = new SharedPrefManager(context).getPlayerIndex();
-        if (!id.equals("NOT_FOUND") && (index == 1 || index == 2)) {
-            if (index == 1) {
-                couplesRef.child(id).child("player2Location")
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.i(TAG, "onDataChange: " + dataSnapshot.getValue().toString());
-                                if (onLocationChangeListener != null && dataSnapshot.getValue() != null)
-                                    onLocationChangeListener.onLocationChanged(Couple.getLatLng((ArrayList<Double>) dataSnapshot.getValue()));
-                            }
+    public LatLng fetchPartnerCoordinates(){
+        FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player1Roll").startAt(rollNo).endAt(rollNo).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player2Roll").startAt(rollNo).endAt(rollNo).
+                            addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists()){
+                                        Couple couple = dataSnapshot.getValue(Couple.class);
+                                        new SharedPrefManager(context).setTeamId(couple.getId());
+                                        ArrayList<Double> partnerLocation = couple.getPlayer1Location();
+                                        latLng = new LatLng(partnerLocation.get(0),partnerLocation.get(1));
+                                     }
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                if (onLocationChangeListener != null)
-                                    onLocationChangeListener.onErrorOccured(databaseError.getMessage());
-                            }
-                        });
-            } else {
-                couplesRef.child(id).child("player1Location")
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.i(TAG, "onDataChange: " + dataSnapshot.getValue().toString());
-                                if (onLocationChangeListener != null && dataSnapshot.getValue() != null)
-                                    onLocationChangeListener.onLocationChanged(Couple.getLatLng((ArrayList<Double>) dataSnapshot.getValue()));
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                if (onLocationChangeListener != null)
-                                    onLocationChangeListener.onErrorOccured(databaseError.getMessage());
-                            }
-                        });
+                                }
+                            });
+                }else {
+                    Couple couple = dataSnapshot.getValue(Couple.class);
+                    ArrayList<Double> partnerLocation = couple.getPlayer2Location();
+                    latLng = new LatLng(partnerLocation.get(0),partnerLocation.get(1));
+                }
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        } else {
-            if (onLocationChangeListener != null)
-                onLocationChangeListener.onErrorOccured("Not found!");
+            }
+        });
 
-        }
-        return this;
+        return this.latLng;
     }
 
-    public void writeUserLocation(LatLng latLng) {
+    public void writeUserLocation(LatLng latLng){
         ArrayList<Double> userLocation = new ArrayList<>();
         userLocation.add(latLng.latitude);
         userLocation.add(latLng.longitude);
-        writeUserLocation(userLocation);
+        String s = new SharedPrefManager(context).getTeamId();
+        FirebaseDatabase.getInstance().getReference().child("Couples").child(s).setValue(userLocation);
     }
 
-    public void writeUserLocation(ArrayList<Double> userLocation) {
-        String s = new SharedPrefManager(context).getCoupleId();
-        int i = new SharedPrefManager(context).getPlayerIndex();
-        couplesRef.child(s).child("player" + i + "Location").setValue(userLocation);
+    public void writeUserLocation(ArrayList<Double> userLocation){
+        String s = new SharedPrefManager(context).getTeamId();
+        FirebaseDatabase.getInstance().getReference().child("Couples").child(s).setValue(userLocation);
     }
 
-    public void writeUserLocation(Double lat, Double longi) {
+    public void writeUserLocation(Double lat,Double longi){
         ArrayList<Double> userLocation = new ArrayList<>();
         userLocation.add(lat);
         userLocation.add(longi);
-        writeUserLocation(userLocation);
-    }
-
-    public interface OnLocationChangeListener {
-        void onLocationChanged(LatLng partnerNewLocation);
-
-        void onErrorOccured(String error);
+        String s = new SharedPrefManager(context).getTeamId();
+        FirebaseDatabase.getInstance().getReference().child("Couples").child(s).setValue(userLocation);
     }
 
 }
