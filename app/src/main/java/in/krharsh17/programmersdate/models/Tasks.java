@@ -4,7 +4,44 @@ import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.Constants;
 
-public class Task implements Constants {
+public class Tasks implements Constants {
+
+    private Logo logoTask;
+    private QRCode qrTask;
+    private BarCode barTask;
+    private Pose poseTask;
+
+    public Logo getLogoTask() {
+        return logoTask;
+    }
+
+    public void setLogoTask(Logo logoTask) {
+        this.logoTask = logoTask;
+    }
+
+    public QRCode getQrTask() {
+        return qrTask;
+    }
+
+    public void setQrTask(QRCode qrTask) {
+        this.qrTask = qrTask;
+    }
+
+    public BarCode getBarTask() {
+        return barTask;
+    }
+
+    public void setBarTask(BarCode barTask) {
+        this.barTask = barTask;
+    }
+
+    public Pose getPoseTask() {
+        return poseTask;
+    }
+
+    public void setPoseTask(Pose poseTask) {
+        this.poseTask = poseTask;
+    }
 
     public static class Logo {
         private String taskType = taskTypeLogo;
@@ -39,7 +76,7 @@ public class Task implements Constants {
     public static class QRCode {
         private String taskType = taskTypeQR;
         private ArrayList<ArrayList<Double>> locations;
-        private ArrayList<String> QRList;
+        private ArrayList<String> qrList;
 
         public String getTaskType() {
             return taskType;
@@ -57,19 +94,19 @@ public class Task implements Constants {
             this.locations = locations;
         }
 
-        public ArrayList<String> getQRList() {
-            return QRList;
+        public ArrayList<String> getQrList() {
+            return qrList;
         }
 
-        public void setQRList(ArrayList<String> QRList) {
-            this.QRList = QRList;
+        public void setQrList(ArrayList<String> qrList) {
+            this.qrList = qrList;
         }
     }
 
     public static class BarCode {
         private String taskType = taskTypeBar;
         private ArrayList<ArrayList<Double>> locations;
-        private ArrayList<String> BarcodeList;
+        private ArrayList<String> barcodeList;
 
         public String getTaskType() {
             return taskType;
@@ -88,11 +125,11 @@ public class Task implements Constants {
         }
 
         public ArrayList<String> getBarcodeList() {
-            return BarcodeList;
+            return barcodeList;
         }
 
         public void setBarcodeList(ArrayList<String> barcodeList) {
-            BarcodeList = barcodeList;
+            this.barcodeList = barcodeList;
         }
     }
 
