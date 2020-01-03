@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Slide;
@@ -21,6 +22,7 @@ import android.view.animation.DecelerateInterpolator;
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.models.Level;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setAnimation();
         setContentView(R.layout.activity_main);
+        Intent intent = new Intent(MainActivity.this, LogoActivity.class);
+        startActivity(intent);
         init();
         run();
 

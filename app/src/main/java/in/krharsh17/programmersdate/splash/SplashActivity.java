@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.home.MainActivity;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
@@ -76,7 +77,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     private void proceedToHome() {
         ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(this);
-        startActivity(new Intent(this, MainActivity.class),options.toBundle());
+        startActivity(new Intent(this, LogoActivity.class),options.toBundle());
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
