@@ -77,7 +77,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     private void proceedToHome() {
         ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(this);
-        startActivity(new Intent(this, LogoActivity.class),options.toBundle());
+        startActivity(new Intent(this, MainActivity.class),options.toBundle());
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

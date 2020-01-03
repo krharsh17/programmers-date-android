@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setAnimation();
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(MainActivity.this, LogoActivity.class);
-        startActivity(intent);
         init();
         run();
 
