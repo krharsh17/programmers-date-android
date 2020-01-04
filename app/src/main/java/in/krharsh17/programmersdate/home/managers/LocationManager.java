@@ -1,7 +1,6 @@
 package in.krharsh17.programmersdate.home.managers;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.models.Couple;
 
-import static com.android.volley.VolleyLog.TAG;
 import static in.krharsh17.programmersdate.Constants.couplesRef;
 
 public class LocationManager {
@@ -43,7 +41,6 @@ public class LocationManager {
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.i(TAG, "onDataChange: " + dataSnapshot.getValue().toString());
                                 if (onLocationChangeListener != null && dataSnapshot.getValue() != null)
                                     onLocationChangeListener.onLocationChanged(Couple.getLatLng((ArrayList<Double>) dataSnapshot.getValue()));
                             }
@@ -59,7 +56,6 @@ public class LocationManager {
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Log.i(TAG, "onDataChange: " + dataSnapshot.getValue().toString());
                                 if (onLocationChangeListener != null && dataSnapshot.getValue() != null)
                                     onLocationChangeListener.onLocationChanged(Couple.getLatLng((ArrayList<Double>) dataSnapshot.getValue()));
                             }
@@ -91,7 +87,9 @@ public class LocationManager {
     public void writeUserLocation(ArrayList<Double> userLocation) {
         String s = new SharedPrefManager(context).getCoupleId();
         int i = new SharedPrefManager(context).getPlayerIndex();
-        couplesRef.child(s).child("player" + i + "Location").setValue(userLocation);
+        if (!s.equals("NOT_FOUND") && i != 0) {
+            couplesRef.child(s).child("player" + i + "Location").setValue(userLocation);
+        }
     }
 
     public void writeUserLocation(Double lat, Double longi) {

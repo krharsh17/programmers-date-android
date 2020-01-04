@@ -22,7 +22,7 @@ public class CoupleManager {
     private String id;
     private OnFetchedListener onFetchedListener;
 
-    public CoupleManager(Context context) {
+    CoupleManager(Context context) {
         id = new SharedPrefManager(context).getCoupleId();
     }
 
@@ -76,11 +76,11 @@ public class CoupleManager {
         }
     }
 
-    public void setOnFetchedListener(OnFetchedListener onFetchedListener) {
+    void setOnFetchedListener(OnFetchedListener onFetchedListener) {
         this.onFetchedListener = onFetchedListener;
     }
 
-    public CoupleManager getCouple() {
+    CoupleManager getCouple() {
         if (!id.equals("NOT_FOUND"))
             couplesRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
