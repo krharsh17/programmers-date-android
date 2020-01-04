@@ -36,6 +36,9 @@ import java.util.Objects;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.home.managers.LocationManager;
+import in.krharsh17.programmersdate.models.Couple;
 
 
 public class Map extends Fragment implements OnMapReadyCallback, Constants {

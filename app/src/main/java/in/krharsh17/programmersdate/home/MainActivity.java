@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected float calculateSpeedPerPixel
                             (DisplayMetrics displayMetrics) {
-                        return 100f/displayMetrics.densityDpi;
+                        return 200f/displayMetrics.densityDpi;
                     }
                 };
     }
