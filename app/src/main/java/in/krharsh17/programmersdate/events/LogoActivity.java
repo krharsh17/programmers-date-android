@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.google.firebase.storage.FirebaseStorage;
+
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -51,6 +53,7 @@ import in.krharsh17.programmersdate.ViewUtils;
 import in.krharsh17.programmersdate.home.MainActivity;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
 import in.krharsh17.programmersdate.models.Couple;
+import in.krharsh17.programmersdate.models.Level;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -61,6 +64,8 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     private CameraPreview mPreview;
     int currentlevel;
     String coupleId;
+    Level level;
+    boolean isSuccess = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +85,23 @@ public class LogoActivity extends AppCompatActivity implements Constants {
             public void onCoupleFetched(Couple couple) {
                 currentlevel = couple.getCurrentLevel();
                 coupleId = couple.getId();
+                level = couple.getLevels().get(currentlevel-1);
+                String root = Environment.getExternalStorageDirectory().toString();
+                File myDir = new File(root);
+                myDir.mkdirs();
+                String logofile = "Image-match.jpg";
+                File lfile = new File(myDir, logofile);
+                String imagename = level.getLogoValue();
+                FirebaseStorage.getInstance().getReference().child("logos").child(imagename).getFile(lfile);
                 ViewUtils.showToast(LogoActivity.this,"Scanning",ViewUtils.DURATION_SHORT);
                 Handler handler = new Handler();
 
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        onBackPressed();
-                        ViewUtils.showToast(getParent(),"Scanning timed out",ViewUtils.DURATION_LONG);
+                        if (isSuccess==false) {
+                            onBackPressed();
+                            ViewUtils.showToast(getParent(), "Scanning timed out", ViewUtils.DURATION_LONG);
+                        }
 
                     }
                 }, runtime);
@@ -142,7 +157,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     public void onBackPressed() {
         Intent intent = new Intent(LogoActivity.this, MainActivity.class);
         startActivity(intent);
-        finish();
+        LogoActivity.this.finish();
     }
 
     static {
@@ -176,7 +191,9 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            captureAndMatch();
+                            if (isSuccess==false) {
+                                captureAndMatch();
+                            }
                         }
                     });
                     try {
@@ -197,6 +214,9 @@ public class LogoActivity extends AppCompatActivity implements Constants {
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap bmprotated =  Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
                 String root = Environment.getExternalStorageDirectory().toString();
                 File myDir = new File(root);
                 myDir.mkdirs();
@@ -206,13 +226,12 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                 Log.i("LOAD", "" + bmp.getByteCount());
                 try {
                     FileOutputStream out = new FileOutputStream(file);
-                    Bitmap savebmp = bmp;
-                    savebmp.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    bmprotated.compress(Bitmap.CompressFormat.JPEG, 90, out);
                     out.flush();
                     out.close();
                     File sdCard = Environment.getExternalStorageDirectory();
                     String path1, path2;
-                    path1 = sdCard.getAbsolutePath() + "/Image-test1.jpg";
+                    path1 = sdCard.getAbsolutePath() + "/Image-match.jpg";
                     path2 = sdCard.getAbsolutePath() + "/Image-test.jpg";
 
                     FeatureDetector detector = FeatureDetector.create(FeatureDetector.ORB);
@@ -239,12 +258,15 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                     Log.i("itnaMatchKiya", "total: " + total + " Match: "+Match);
                     if(total>totalCheckPoints){
                         if(Match>upperMatchPoints){
-                            levelSuccess();
+                            if(isSuccess==false) {
+                                levelSuccess();
+                            }
                         }
                     }else{
                         if(Match>lowerMatchPoints){
-                            levelSuccess();
-                        }
+                            if(isSuccess==false) {
+                                levelSuccess();
+                            }                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -255,9 +277,11 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     }
 
     public void levelSuccess(){
+        isSuccess = true;
         couplesRef.child(coupleId).child("currentLevel").setValue(currentlevel+1);
         ViewUtils.showToast(this,"Level completed successfully",ViewUtils.DURATION_LONG);
         onBackPressed();
+        LogoActivity.this.finish();
     }
 
 }

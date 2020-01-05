@@ -19,11 +19,11 @@ import static in.krharsh17.programmersdate.Constants.couplesRef;
 
 public class CoupleManager {
 
-    private String id;
+    private String id = "c1";
     private OnFetchedListener onFetchedListener;
 
     public CoupleManager(Context context) {
-        id = new SharedPrefManager(context).getCoupleId();
+        //id = new SharedPrefManager(context).getCoupleId();
     }
 
     public static void syncWithServer(final Activity context) {

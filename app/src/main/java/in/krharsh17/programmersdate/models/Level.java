@@ -33,6 +33,8 @@ public class Level {
         this.taskType = taskType;
     }
 
+
+
     public ArrayList<ArrayList<Double>> getLocations() {
         return locations;
     }
@@ -79,5 +81,9 @@ public class Level {
 
     public void setAudioValue(String audioValue) {
         this.audioValue = audioValue;
+    }
+
+    public Level(){
+
     }
 }

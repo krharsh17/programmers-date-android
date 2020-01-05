@@ -8,7 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public interface Constants {
 
     int mapDefaultHeight = 14;
-    int runtime = 15000;
+    int runtime = 20000;
     int totalCheckPoints = 50;
     int upperMatchPoints = 10;
     int lowerMatchPoints = 5;
