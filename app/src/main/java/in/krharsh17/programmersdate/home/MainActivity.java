@@ -1,10 +1,5 @@
 package in.krharsh17.programmersdate.home;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,14 +14,18 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.R;
-import in.krharsh17.programmersdate.events.QRActivity;
-import in.krharsh17.programmersdate.models.Level;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
+import in.krharsh17.programmersdate.events.PoseActivity;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
+import in.krharsh17.programmersdate.models.Level;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, QRActivity.class));
+                startActivity(new Intent(MainActivity.this, PoseActivity.class));
             }
         }, 2000);
 
@@ -101,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     void setupBottomPager() {
+
 
         bottomPager.setAdapter(new BottomPagerAdapter(getSupportFragmentManager()));
 

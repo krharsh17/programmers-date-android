@@ -6,7 +6,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 public interface Constants {
 
     int mapDefaultHeight = 14;
-    String TAG = "DEFAULT";
 
     String sharedPrefName = "PDate";
 
@@ -43,4 +42,9 @@ public interface Constants {
     String taskTypeBar = "BAR";
     String taskTypePose = "POSE";
     String taskTypeTwister = "TWISTER";
+
+    int MODEL_WIDTH = 257;
+    int MODEL_HEIGHT = 257;
+
+    String TAG = "DEBUG";
 }
