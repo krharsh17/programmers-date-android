@@ -46,6 +46,7 @@ public interface Constants {
     String helpTextQR = "Find a hidden QR code in the marked areas!";
     String helpTextBar = "Find a hidden bar code in the show areas!";
     String helpTextLogo = "Find a popular logo in the set areas!";
+    String helpTextTwister = "Say the given tongue twister clearly";
 
     String taskTypeLogo = "LOGO";
     String taskTypeQR = "QR";
