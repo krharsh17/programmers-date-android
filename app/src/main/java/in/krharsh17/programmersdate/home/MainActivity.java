@@ -77,12 +77,12 @@ public class MainActivity extends AppCompatActivity {
         setupBottomPager();
 
         ArrayList<Level> levels = new ArrayList<>();
-        levels.add(new Level(1,"POSE"));
-        levels.add(new Level(2,"QR"));
-        levels.add(new Level(3,"BAR"));
-        levels.add(new Level(4,"POSE"));
-        levels.add(new Level(5,"LOGO"));
-        levels.add(new Level(6,"LOGO"));
+        levels.add(new Level(1,"POSE",false));
+        levels.add(new Level(2,"QR",true));
+        levels.add(new Level(3,"BAR",false));
+        levels.add(new Level(4,"POSE",false));
+        levels.add(new Level(5,"LOGO",false));
+        levels.add(new Level(6,"LOGO",false));
         smoothScroller.setTargetPosition(3);
         levelRecycler.setLayoutManager(linearLayoutManagerThree);
         levelRecycler.setHasFixedSize(true);
