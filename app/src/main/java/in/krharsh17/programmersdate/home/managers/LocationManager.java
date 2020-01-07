@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.models.Couple;
 
+import static in.krharsh17.programmersdate.Constants.couplesRef;
+
 public class LocationManager {
 
     LatLng latLng;
@@ -27,33 +29,41 @@ public class LocationManager {
     }
 
 
-    public LatLng fetchPartnerCoordinates(){
-        FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player1Roll").startAt(rollNo).endAt(rollNo).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    FirebaseDatabase.getInstance().getReference().child("Couples").orderByChild("player2Roll").startAt(rollNo).endAt(rollNo).
-                            addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()){
-                                        Couple couple = dataSnapshot.getValue(Couple.class);
-                                        new SharedPrefManager(context).setTeamId(couple.getId());
-                                        ArrayList<Double> partnerLocation = couple.getPlayer1Location();
-                                        latLng = new LatLng(partnerLocation.get(0),partnerLocation.get(1));
-                                     }
-                                }
+    public LocationManager fetchPartnerLocation() {
+        final String id = new SharedPrefManager(context).getCoupleId();
+        final int index = new SharedPrefManager(context).getPlayerIndex();
+        if (!id.equals("NOT_FOUND") && (index == 1 || index == 2)) {
+            if (index == 1) {
+                couplesRef.child(id).child("player2Location")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (onLocationChangeListener != null && dataSnapshot.getValue() != null)
+                                    onLocationChangeListener.onLocationChanged(Couple.getLatLng((ArrayList<Double>) dataSnapshot.getValue()));
+                            }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                if (onLocationChangeListener != null)
+                                    onLocationChangeListener.onErrorOccured(databaseError.getMessage());
+                            }
+                        });
+            } else {
+                couplesRef.child(id).child("player1Location")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (onLocationChangeListener != null && dataSnapshot.getValue() != null)
+                                    onLocationChangeListener.onLocationChanged(Couple.getLatLng((ArrayList<Double>) dataSnapshot.getValue()));
+                            }
 
-                                }
-                            });
-                }else {
-                    Couple couple = dataSnapshot.getValue(Couple.class);
-                    ArrayList<Double> partnerLocation = couple.getPlayer2Location();
-                    latLng = new LatLng(partnerLocation.get(0),partnerLocation.get(1));
-                }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                if (onLocationChangeListener != null)
+                                    onLocationChangeListener.onErrorOccured(databaseError.getMessage());
+                            }
+                        });
+
             }
 
             @Override
@@ -75,7 +85,11 @@ public class LocationManager {
 
     public void writeUserLocation(ArrayList<Double> userLocation){
         String s = new SharedPrefManager(context).getCoupleId();
-        FirebaseDatabase.getInstance().getReference().child("Couples").child(s).setValue(userLocation);
+        int i = new SharedPrefManager(context).getPlayerIndex();
+        if (!s.equals("NOT_FOUND") && i != 0) {
+            couplesRef.child(s).child("player" + i + "Location").setValue(userLocation);
+        }
+
     }
 
     public void writeUserLocation(Double lat,Double longi){

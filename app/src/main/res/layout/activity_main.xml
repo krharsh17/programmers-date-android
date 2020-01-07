@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -16,19 +17,47 @@
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:translationZ="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.16"
         app:layout_constraintVertical_bias="0.0"
         app:reverseLayout="true" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/time_remaining"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_clock"
+        app:backgroundTint="#fff"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/levels_recycler" />
+
+
+    <TextView
+        android:id="@+id/time_remaining_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:alpha="0"
+        android:background="@drawable/custom_toast_background"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@id/time_remaining"
+        app:layout_constraintEnd_toStartOf="@id/time_remaining"
+        app:layout_constraintTop_toTopOf="@id/time_remaining" />
+
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/main_frame"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/bottom_pager"

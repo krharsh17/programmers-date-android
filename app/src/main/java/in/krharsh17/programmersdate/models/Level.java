@@ -21,6 +21,10 @@ public class Level {
         isSkipped = skipped;
     }
 
+    public Level() {
+
+    }
+
     public int getLevelNumber() {
         return levelNumber;
     }
