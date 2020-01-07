@@ -2,6 +2,7 @@ package in.krharsh17.programmersdate.home;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Slide;
@@ -28,11 +29,14 @@ import com.google.firebase.database.ValueEventListener;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
 import in.krharsh17.programmersdate.models.Couple;
-
 import static in.krharsh17.programmersdate.Constants.couplesRef;
+import in.krharsh17.programmersdate.events.LogoActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
+import in.krharsh17.programmersdate.models.Level;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected float calculateSpeedPerPixel
                             (DisplayMetrics displayMetrics) {
-                        return 200f / displayMetrics.densityDpi;
+                        return 200f/displayMetrics.densityDpi;
                     }
                 };
         coupleId = new SharedPrefManager(this).getCoupleId();

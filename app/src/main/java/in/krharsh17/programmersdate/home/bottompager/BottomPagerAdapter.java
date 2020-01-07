@@ -15,8 +15,7 @@ public class BottomPagerAdapter extends FragmentPagerAdapter {
     public BottomPagerAdapter(FragmentManager fm) {
         super(fm);
         fragments = new ArrayList<>();
-        fragments.add(new DetailFragment().setTaskType(Constants.taskTypeQR, 1));
-        fragments.add(new DetailFragment().setTaskType(Constants.taskTypePose, 3));
+        fragments.add(new DetailFragment().setTaskType(Constants.taskTypeLogo, 1));
     }
 
     public ArrayList<DetailFragment> getFragments() {

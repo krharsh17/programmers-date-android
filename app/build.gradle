@@ -44,6 +44,8 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
     implementation 'io.supercharge:funnyloader:0.2.0'
+    implementation project(path: ':openCVLibrary341')
+
 }
 
 apply plugin: 'com.google.gms.google-services'

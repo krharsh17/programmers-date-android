@@ -15,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.events.AudioActivity;
 import in.krharsh17.programmersdate.events.BarActivity;
 import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.events.PoseActivity;
@@ -57,6 +58,8 @@ public class DetailFragment extends Fragment implements Constants {
                     info.setText(helpTextQR);
                     break;
                 case taskTypeTwister:
+                    begin.setImageResource(R.drawable.task_logo_icon);
+                    info.setText(helpTextTwister);
                     break;
             }
         }
@@ -115,6 +118,9 @@ public class DetailFragment extends Fragment implements Constants {
                             startActivity(qrIntent);
                             break;
                         case taskTypeTwister:
+                            Intent twisterIntent = new Intent(getActivity(), AudioActivity.class);
+                            twisterIntent.putExtra("currentLevel", currentLevel);
+                            startActivity(twisterIntent);
                             break;
                     }
 
