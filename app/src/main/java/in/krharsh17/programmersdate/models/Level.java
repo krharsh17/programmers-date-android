@@ -12,6 +12,10 @@ public class Level {
     private String logoValue;
     private String audioValue;
 
+    public Level() {
+
+    }
+
     public int getLevelNumber() {
         return levelNumber;
     }

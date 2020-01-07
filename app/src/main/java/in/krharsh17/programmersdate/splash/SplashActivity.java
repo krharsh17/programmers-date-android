@@ -1,22 +1,16 @@
 package in.krharsh17.programmersdate.splash;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.Slide;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,6 +19,7 @@ import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
 import in.krharsh17.programmersdate.home.MainActivity;
+import in.krharsh17.programmersdate.home.managers.CoupleManager;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -55,8 +50,10 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         heading = findViewById(R.id.programmers_text);
         next = findViewById(R.id.splash_next);
         roll = findViewById(R.id.splash_roll);
-        parent = findViewById(R.id.splash_parent);
+        parent = findViewById(R.id.root);
         next.setOnClickListener(this);
+
+        CoupleManager.createGame(this);
     }
 
     private void splash() {

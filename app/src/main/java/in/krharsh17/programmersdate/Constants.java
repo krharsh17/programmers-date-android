@@ -49,4 +49,9 @@ public interface Constants {
     DatabaseReference couplesRef = FirebaseDatabase.getInstance().getReference().child("couples");
     DatabaseReference tasksRef = FirebaseDatabase.getInstance().getReference().child("tasks");
 
+    int numLevels = 10;
+    int numLocs = 1;
+
+    long timeLimit = 1000 * 60 * 60 * 3;
+
 }

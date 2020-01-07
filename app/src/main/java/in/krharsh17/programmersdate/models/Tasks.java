@@ -10,6 +10,15 @@ public class Tasks implements Constants {
     private QRCode qrTask;
     private BarCode barTask;
     private Pose poseTask;
+    private Twister twisterTask;
+
+    public Twister getTwisterTask() {
+        return twisterTask;
+    }
+
+    public void setTwisterTask(Twister twisterTask) {
+        this.twisterTask = twisterTask;
+    }
 
     public Logo getLogoTask() {
         return logoTask;
@@ -160,6 +169,36 @@ public class Tasks implements Constants {
 
         public void setPoseList(ArrayList<String> poseList) {
             this.poseList = poseList;
+        }
+    }
+
+    public static class Twister {
+        private String taskType = taskTypeTwister;
+        private ArrayList<ArrayList<Double>> locations;
+        private ArrayList<String> twisterList;
+
+        public String getTaskType() {
+            return taskType;
+        }
+
+        public void setTaskType(String taskType) {
+            this.taskType = taskType;
+        }
+
+        public ArrayList<ArrayList<Double>> getLocations() {
+            return locations;
+        }
+
+        public void setLocations(ArrayList<ArrayList<Double>> locations) {
+            this.locations = locations;
+        }
+
+        public ArrayList<String> getTwisterList() {
+            return twisterList;
+        }
+
+        public void setTwisterList(ArrayList<String> twisterList) {
+            this.twisterList = twisterList;
         }
     }
 

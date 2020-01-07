@@ -14,17 +14,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import java.util.ArrayList;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.SharedPrefManager;
+import in.krharsh17.programmersdate.ViewUtils;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
-import in.krharsh17.programmersdate.models.Level;
+import in.krharsh17.programmersdate.home.managers.CoupleManager;
+import in.krharsh17.programmersdate.models.Couple;
+
+import static in.krharsh17.programmersdate.Constants.couplesRef;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     Map map;
     ViewPager bottomPager;
     private boolean areOverlaysShown = true;
+
+    String coupleId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         return 200f / displayMetrics.densityDpi;
                     }
                 };
+        coupleId = new SharedPrefManager(this).getCoupleId();
     }
 
 
@@ -79,20 +90,47 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         setupBottomPager();
 
-        ArrayList<Level> levels = new ArrayList<>();
-        levels.add(new Level(1, "POSE"));
-        levels.add(new Level(2, "QR"));
-        levels.add(new Level(3, "BAR"));
-        levels.add(new Level(4, "POSE"));
-        levels.add(new Level(5, "LOGO"));
-        levels.add(new Level(6, "LOGO"));
-        smoothScroller.setTargetPosition(3);
-        levelRecycler.setLayoutManager(linearLayoutManagerThree);
-        levelRecycler.setHasFixedSize(true);
-        levelRecycler.setLayoutFrozen(true);
-        levelRecycler.setAdapter(new LevelsAdapter(this, levels, 3));
-        linearLayoutManagerThree.startSmoothScroll(smoothScroller);
-        checkCurrentPosition();
+        if (!coupleId.equals("NOT_FOUND")) {
+            new CoupleManager(this)
+                    .getCouple().setOnFetchedListener(new CoupleManager.OnFetchedListener() {
+                @Override
+                public void onCoupleFetched(Couple couple) {
+                    levelRecycler.setLayoutManager(linearLayoutManagerThree);
+                    levelRecycler.setHasFixedSize(true);
+                    levelRecycler.setLayoutFrozen(true);
+                    if (couple.getLevels() != null)
+                        levelRecycler.setAdapter(new LevelsAdapter(MainActivity.this, couple.getLevels(), couple.getCurrentLevel()));
+                    smoothScroller.setTargetPosition(couple.getCurrentLevel());
+                    linearLayoutManagerThree.startSmoothScroll(smoothScroller);
+                    checkCurrentPosition();
+                    attachCoupleListener();
+                }
+
+                @Override
+                public void onErrorOccured(String message) {
+                    ViewUtils.showToast(MainActivity.this, message, ViewUtils.DURATION_SHORT);
+                }
+            });
+
+        } else {
+            ViewUtils.showToast(MainActivity.this, "Some error occured!", ViewUtils.DURATION_SHORT);
+        }
+    }
+
+    void attachCoupleListener() {
+        couplesRef
+                .child(coupleId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -113,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+    }
+
+    void setupClock() {
 
     }
 

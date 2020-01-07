@@ -5,6 +5,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
+import in.krharsh17.programmersdate.Constants;
+
 public class Couple {
 
     private String id;
@@ -16,6 +18,15 @@ public class Couple {
     private ArrayList<Double> player1Location;
     private ArrayList<Double> player2Location;
     private ArrayList<Level> levels;
+    private long timeLimit = Constants.timeLimit;
+
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
+    }
 
     public ArrayList<Level> getLevels() {
         return levels;

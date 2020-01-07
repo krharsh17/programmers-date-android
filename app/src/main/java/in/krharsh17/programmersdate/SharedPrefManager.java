@@ -15,7 +15,7 @@ public class SharedPrefManager {
         editor = sharedPreferences.edit();
     }
 
-    public SharedPrefManager setTeamId(String teamId) {
+    public SharedPrefManager setCoupleId(String teamId) {
         editor.putString("teamID", teamId);
         editor.commit();
         return this;
