@@ -64,6 +64,8 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
 
     private Marker myMarker, partnerMarker;
 
+    private MainActivity mainActivity;
+
     public Map() {
 
     }
@@ -146,6 +148,22 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
 
         focusMap(mainBuilding);
 
+        map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+                Log.i(TAG, "onCameraMoveStarted: " + i);
+                if (i == REASON_GESTURE)
+                    mainActivity.hideOverlays();
+            }
+        });
+
+        map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                mainActivity.showOverlays();
+            }
+        });
+
         addLandmark(tennisCourt, R.drawable.marker_tennis);
         addLandmark(carParking, R.drawable.marker_parking);
     }
@@ -153,6 +171,8 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
     @Override
     public void onStart() {
         super.onStart();
+
+        mainActivity = (MainActivity) getActivity();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
 
@@ -292,8 +312,8 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (myLocationShown) {
-                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                    while (myLocationShown && mainActivity != null && mainActivity.appRunning) {
+                        mainActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 rotationCounter++;
