@@ -2,11 +2,20 @@ package in.krharsh17.programmersdate;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public interface Constants {
 
     int mapDefaultHeight = 14;
+    int runtime = 20000;
+    int totalCheckPoints = 50;
+    int upperMatchPoints = 10;
+    int lowerMatchPoints = 5;
     String TAG = "DEFAULT";
+
+    DatabaseReference couplesRef = FirebaseDatabase.getInstance().getReference().child("couples");
+    DatabaseReference tasksRef = FirebaseDatabase.getInstance().getReference().child("tasks");
 
     String sharedPrefName = "PDate";
 
@@ -37,6 +46,7 @@ public interface Constants {
     String helpTextQR = "Find a hidden QR code in the marked areas!";
     String helpTextBar = "Find a hidden bar code in the show areas!";
     String helpTextLogo = "Find a popular logo in the set areas!";
+    String helpTextTwister = "Say the given tongue twister clearly";
 
     String taskTypeLogo = "LOGO";
     String taskTypeQR = "QR";

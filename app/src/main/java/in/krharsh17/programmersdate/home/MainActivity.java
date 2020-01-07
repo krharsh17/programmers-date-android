@@ -2,6 +2,7 @@ package in.krharsh17.programmersdate.home;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Slide;
@@ -23,6 +24,10 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.events.LogoActivity;
+import in.krharsh17.programmersdate.models.Level;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
 import in.krharsh17.programmersdate.models.Level;
 
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected float calculateSpeedPerPixel
                             (DisplayMetrics displayMetrics) {
-                        return 200f / displayMetrics.densityDpi;
+                        return 200f/displayMetrics.densityDpi;
                     }
                 };
     }
@@ -80,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
         setupBottomPager();
 
         ArrayList<Level> levels = new ArrayList<>();
-        levels.add(new Level(1, "POSE"));
-        levels.add(new Level(2, "QR"));
-        levels.add(new Level(3, "BAR"));
-        levels.add(new Level(4, "POSE"));
-        levels.add(new Level(5, "LOGO"));
-        levels.add(new Level(6, "LOGO"));
+        levels.add(new Level(1,"POSE",false));
+        levels.add(new Level(2,"QR",true));
+        levels.add(new Level(3,"BAR",false));
+        levels.add(new Level(4,"POSE",false));
+        levels.add(new Level(5,"LOGO",false));
+        levels.add(new Level(6,"LOGO",false));
         smoothScroller.setTargetPosition(3);
         levelRecycler.setLayoutManager(linearLayoutManagerThree);
         levelRecycler.setHasFixedSize(true);

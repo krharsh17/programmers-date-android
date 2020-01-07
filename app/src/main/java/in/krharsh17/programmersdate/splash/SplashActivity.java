@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.home.MainActivity;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
