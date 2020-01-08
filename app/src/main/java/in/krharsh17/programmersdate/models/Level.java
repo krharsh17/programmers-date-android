@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Level {
     private int levelNumber;
     private String taskType;
-    private ArrayList<ArrayList<Double>> locations;
+    private ArrayList<String> locations;
     private String qrValue;
     private String barValue;
     private String poseValue;
@@ -21,9 +21,6 @@ public class Level {
         isSkipped = skipped;
     }
 
-    public Level() {
-
-    }
 
     public int getLevelNumber() {
         return levelNumber;
@@ -47,13 +44,11 @@ public class Level {
         this.isSkipped = isSkipped;
     }
 
-
-
-    public ArrayList<ArrayList<Double>> getLocations() {
+    public ArrayList<String> getLocations() {
         return locations;
     }
 
-    public void setLocations(ArrayList<ArrayList<Double>> locations) {
+    public void setLocations(ArrayList<String> locations) {
         this.locations = locations;
     }
 

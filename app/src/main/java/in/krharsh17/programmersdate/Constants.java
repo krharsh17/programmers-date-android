@@ -19,24 +19,59 @@ public interface Constants {
 
     String sharedPrefName = "PDate";
 
-    LatLng tennisCourt = new LatLng(25.620952, 85.172708);
-    LatLng mainBuilding = new LatLng(25.620737, 85.171954);
-    LatLng libraryNescafe = new LatLng(25.620737, 85.171581);
-    LatLng library = new LatLng(25.620599, 85.171568);
-    LatLng incubationCentre = new LatLng(25.620677, 85.171150);
-    LatLng chemistryDept = new LatLng(25.620662, 85.171000);
-    LatLng guestHouse = new LatLng(25.620691, 85.172888);
-    LatLng cseDept = new LatLng(25.620621, 85.174219);
-    LatLng nurseryShed = new LatLng(25.619992, 85.174031);
-    LatLng cwrs = new LatLng(25.619617, 85.173964);
-    LatLng sportsGround = new LatLng(25.620058, 85.172481);
-    LatLng sac = new LatLng(25.619323, 85.172189);
-    LatLng nescafeSac = new LatLng(25.619038, 85.171942);
-    LatLng canteneLibrary = new LatLng(25.620438, 85.171719);
-    LatLng canteneMainBuilding = new LatLng(25.621083, 85.171681);
-    LatLng carParking = new LatLng(25.620933, 85.171512);
-    LatLng mainGate = new LatLng(25.620307, 85.171928);
-    LatLng cellTower = new LatLng(25.620655, 85.173690);
+    LatLng sacBuilding = new LatLng(25.6193583, 85.1720750);
+    LatLng cafeteria = new LatLng(25.6191857, 85.1720269);
+    LatLng mainBuilding = new LatLng(25.6207500, 85.1719484);
+    LatLng civilDept = new LatLng(25.6212939, 85.1722132);
+    LatLng computerCentre = new LatLng(25.6213556, 85.1727258);
+    LatLng tennisCourt = new LatLng(25.6209605, 85.1726816);
+    LatLng directorBungalow = new LatLng(25.6213756, 85.1732707);
+    LatLng guestHouse = new LatLng(25.6210010, 85.1728988);
+    LatLng mechanicalWorkshop = new LatLng(25.6206688, 85.1730678);
+    LatLng gangaHostel = new LatLng(25.6210509, 85.1740468);
+    LatLng cseDept = new LatLng(25.6205914, 85.1742185);
+    LatLng kosiHostel = new LatLng(25.6206004, 85.1745043);
+    LatLng CWRS = new LatLng(25.6194965, 85.1739721);
+    LatLng library = new LatLng(25.6205615, 85.1715333);
+    LatLng canteenGopalJi = new LatLng(25.6204324, 85.1716841);
+    LatLng canteenShuklaJi = new LatLng(25.6210593, 85.1717103);
+    LatLng electricalDept = new LatLng(25.6210615, 85.1706243);
+    LatLng mechanicalDept = new LatLng(25.6212746, 85.1706508);
+    LatLng newElectricalDept = new LatLng(25.6206310, 85.1710297);
+    LatLng electronicsDept = new LatLng(25.6204114, 85.1736354);
+    LatLng physicsDept = new LatLng(25.6204414, 85.1734081);
+    LatLng ground = new LatLng(25.6200502, 85.1726082);
+    LatLng soneAHostel = new LatLng(25.6181565, 85.1719772);
+    LatLng soneBHostel = new LatLng(25.6185166, 85.1719802);
+    LatLng miniAuditorium = new LatLng(25.6198062, 85.1737271);
+
+    String sacBuildingText = "SAC";
+    String cafeteriaText = "Cafeteria";
+    String mainBuildingText = "Main Building";
+    String civilDeptText = "Civil Department";
+    String computerCentreText = "Computer Centre";
+    String tennisCourtText = "Tennis Court";
+    String directorBungalowText = "Director's Bungalow";
+    String guestHouseText = "Guest House";
+    String mechanicalWorkshopText = "Mechanical Workshop";
+    String gangaHostelText = "Ganga Hostel";
+    String cseDeptText = "CSE Department";
+    String kosiHostelText = "Kosi Hostel";
+    String CWRSText = "CWRS";
+    String libraryText = "Library";
+    String canteenGopalJiText = "Canteen Gopal Ji";
+    String canteenShuklaJiText = "Canteen Shukla Ji";
+    String electricalDeptText = "Electrical Department";
+    String mechanicalDeptText = "Mechanical Department";
+    String newElectricalDeptText = "New Electrical Department";
+    String electronicsDeptText = "Electronics Department";
+    String physicsDeptText = "Physics Department";
+    String groundText = "Main Ground";
+    String soneAHostelText = "Sone A Hostel";
+    String soneBHostelText = "Sone B Hostel";
+    String miniAuditoriumText = "Mini Auditorium";
+
+
 
     LatLngBounds NITP_BOUNDS = new LatLngBounds(new LatLng(25.619097, 85.170036),
             new LatLng(25.621264, 85.175347));
@@ -53,9 +88,6 @@ public interface Constants {
     String taskTypeBar = "BAR";
     String taskTypePose = "POSE";
     String taskTypeTwister = "TWISTER";
-
-    DatabaseReference couplesRef = FirebaseDatabase.getInstance().getReference().child("couples");
-    DatabaseReference tasksRef = FirebaseDatabase.getInstance().getReference().child("tasks");
 
     int numLevels = 10;
     int numLocs = 1;

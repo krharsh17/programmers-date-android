@@ -1,62 +1,39 @@
 package in.krharsh17.programmersdate.events;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.storage.FirebaseStorage;
 
-import org.opencv.android.Utils;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.DMatch;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDMatch;
 import org.opencv.core.MatOfKeyPoint;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.RotatedRect;
-import org.opencv.core.Scalar;
 import org.opencv.features2d.DescriptorExtractor;
 import org.opencv.features2d.DescriptorMatcher;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.home.MainActivity;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
 import in.krharsh17.programmersdate.models.Couple;
 import in.krharsh17.programmersdate.models.Level;
-
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 public class LogoActivity extends AppCompatActivity implements Constants {
 
@@ -65,7 +42,8 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     int currentlevel;
     String coupleId;
     Level level;
-    boolean isSuccess = false;
+    boolean isSuccess = false, safeToCapture = false;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +52,17 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         mCamera = getCameraInstance();
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        Button captureButton = (Button) findViewById(R.id.button_capture);
+        FrameLayout preview = findViewById(R.id.camera_preview);
         preview.addView(mPreview);
-        ViewUtils.showToast(this,"Please wait",ViewUtils.DURATION_SHORT);
+        mCamera.startPreview();
+        mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+            @Override
+            public void onPreviewFrame(byte[] data, Camera camera) {
+                safeToCapture = true;
+                ViewUtils.removeDialog();
+            }
+        });
+        ViewUtils.showProgressDialog(this, "Please wait..");
         startMatching();
         CoupleManager coupleManager = new CoupleManager(this);
         coupleManager.getCouple().setOnFetchedListener(new CoupleManager.OnFetchedListener() {
@@ -93,14 +78,15 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                 File lfile = new File(myDir, logofile);
                 String imagename = level.getLogoValue();
                 FirebaseStorage.getInstance().getReference().child("logos").child(imagename).getFile(lfile);
-                ViewUtils.showToast(LogoActivity.this,"Scanning",ViewUtils.DURATION_SHORT);
-                Handler handler = new Handler();
+                ViewUtils.showToast(LogoActivity.this, "Scanning..", ViewUtils.DURATION_SHORT);
+                handler = new Handler();
+                ViewUtils.removeDialog();
 
                 handler.postDelayed(new Runnable() {
                     public void run() {
-                        if (isSuccess==false) {
+                        if (!isSuccess) {
+                            ViewUtils.showToast(LogoActivity.this, "Scanning timed out", ViewUtils.DURATION_LONG);
                             onBackPressed();
-                            ViewUtils.showToast(getParent(), "Scanning timed out", ViewUtils.DURATION_LONG);
                         }
 
                     }
@@ -115,6 +101,12 @@ public class LogoActivity extends AppCompatActivity implements Constants {
 
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        handler.removeCallbacksAndMessages(null);
+        super.onBackPressed();
     }
 
     public static Camera getCameraInstance(){
@@ -148,18 +140,6 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         }
     }
 
-    public void matchImages(){
-
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(LogoActivity.this, MainActivity.class);
-        startActivity(intent);
-        LogoActivity.this.finish();
-    }
-
     static {
         System.loadLibrary("opencv_java3");
     }
@@ -191,7 +171,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (isSuccess==false) {
+                            if (!isSuccess && safeToCapture) {
                                 captureAndMatch();
                             }
                         }
@@ -258,13 +238,13 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                     Log.i("itnaMatchKiya", "total: " + total + " Match: "+Match);
                     if(total>totalCheckPoints){
                         if(Match>upperMatchPoints){
-                            if(isSuccess==false) {
+                            if (!isSuccess) {
                                 levelSuccess();
                             }
                         }
                     }else{
                         if(Match>lowerMatchPoints){
-                            if(isSuccess==false) {
+                            if (!isSuccess) {
                                 levelSuccess();
                             }                        }
                     }

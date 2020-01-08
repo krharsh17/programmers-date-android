@@ -54,7 +54,7 @@ public class Tasks implements Constants {
 
     public static class Logo {
         private String taskType = taskTypeLogo;
-        private ArrayList<ArrayList<Double>> locations;
+        private ArrayList<String> locations;
         private ArrayList<String> logoList;
 
         public String getTaskType() {
@@ -65,11 +65,11 @@ public class Tasks implements Constants {
             this.taskType = taskType;
         }
 
-        public ArrayList<ArrayList<Double>> getLocations() {
+        public ArrayList<String> getLocations() {
             return locations;
         }
 
-        public void setLocations(ArrayList<ArrayList<Double>> locations) {
+        public void setLocations(ArrayList<String> locations) {
             this.locations = locations;
         }
 
@@ -84,7 +84,7 @@ public class Tasks implements Constants {
 
     public static class QRCode {
         private String taskType = taskTypeQR;
-        private ArrayList<ArrayList<Double>> locations;
+        private ArrayList<String> locations;
         private ArrayList<String> qrList;
 
         public String getTaskType() {
@@ -95,11 +95,11 @@ public class Tasks implements Constants {
             this.taskType = taskType;
         }
 
-        public ArrayList<ArrayList<Double>> getLocations() {
+        public ArrayList<String> getLocations() {
             return locations;
         }
 
-        public void setLocations(ArrayList<ArrayList<Double>> locations) {
+        public void setLocations(ArrayList<String> locations) {
             this.locations = locations;
         }
 
@@ -114,7 +114,7 @@ public class Tasks implements Constants {
 
     public static class BarCode {
         private String taskType = taskTypeBar;
-        private ArrayList<ArrayList<Double>> locations;
+        private ArrayList<String> locations;
         private ArrayList<String> barcodeList;
 
         public String getTaskType() {
@@ -125,11 +125,11 @@ public class Tasks implements Constants {
             this.taskType = taskType;
         }
 
-        public ArrayList<ArrayList<Double>> getLocations() {
+        public ArrayList<String> getLocations() {
             return locations;
         }
 
-        public void setLocations(ArrayList<ArrayList<Double>> locations) {
+        public void setLocations(ArrayList<String> locations) {
             this.locations = locations;
         }
 
@@ -144,7 +144,7 @@ public class Tasks implements Constants {
 
     public static class Pose {
         private String taskType = taskTypePose;
-        private ArrayList<ArrayList<Double>> locations;
+        private ArrayList<String> locations;
         private ArrayList<String> poseList;
 
         public String getTaskType() {
@@ -155,11 +155,11 @@ public class Tasks implements Constants {
             this.taskType = taskType;
         }
 
-        public ArrayList<ArrayList<Double>> getLocations() {
+        public ArrayList<String> getLocations() {
             return locations;
         }
 
-        public void setLocations(ArrayList<ArrayList<Double>> locations) {
+        public void setLocations(ArrayList<String> locations) {
             this.locations = locations;
         }
 
@@ -174,7 +174,7 @@ public class Tasks implements Constants {
 
     public static class Twister {
         private String taskType = taskTypeTwister;
-        private ArrayList<ArrayList<Double>> locations;
+        private ArrayList<String> locations;
         private ArrayList<String> twisterList;
 
         public String getTaskType() {
@@ -185,11 +185,11 @@ public class Tasks implements Constants {
             this.taskType = taskType;
         }
 
-        public ArrayList<ArrayList<Double>> getLocations() {
+        public ArrayList<String> getLocations() {
             return locations;
         }
 
-        public void setLocations(ArrayList<ArrayList<Double>> locations) {
+        public void setLocations(ArrayList<String> locations) {
             this.locations = locations;
         }
 

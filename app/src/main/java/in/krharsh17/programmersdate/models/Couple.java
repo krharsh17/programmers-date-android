@@ -1,5 +1,7 @@
 package in.krharsh17.programmersdate.models;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.Constants;
@@ -95,5 +97,9 @@ public class Couple {
 
     public void setPlayer2Location(ArrayList<Double> player2Location) {
         this.player2Location = player2Location;
+    }
+
+    public static LatLng getLatLng(ArrayList<Double> location) {
+        return new LatLng(location.get(0), location.get(1));
     }
 }

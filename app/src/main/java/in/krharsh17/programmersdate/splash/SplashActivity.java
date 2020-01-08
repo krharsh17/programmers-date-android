@@ -18,9 +18,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.home.MainActivity;
-import in.krharsh17.programmersdate.home.managers.CoupleManager;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -54,7 +52,6 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         parent = findViewById(R.id.root);
         next.setOnClickListener(this);
 
-        CoupleManager.createGame(this);
     }
 
     private void splash() {

@@ -20,6 +20,7 @@ import in.krharsh17.programmersdate.events.BarActivity;
 import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.events.PoseActivity;
 import in.krharsh17.programmersdate.events.QRActivity;
+import in.krharsh17.programmersdate.home.MainActivity;
 
 
 /**
@@ -129,6 +130,6 @@ public class DetailFragment extends Fragment implements Constants {
     }
 
     public void skipLevel() {
-
+        ((MainActivity) getActivity()).skipCurrentLevel();
     }
 }

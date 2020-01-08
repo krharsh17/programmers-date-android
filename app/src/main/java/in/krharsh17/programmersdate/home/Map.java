@@ -36,9 +36,6 @@ import java.util.Objects;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
-import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.home.managers.LocationManager;
-import in.krharsh17.programmersdate.models.Couple;
 
 
 public class Map extends Fragment implements OnMapReadyCallback, Constants {
@@ -104,15 +101,17 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
     }
 
     public void addLandmark(LatLng location, int drawableRes) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), drawableRes);
-        Bitmap bitmap = Bitmap.createScaledBitmap(originalBitmap, originalBitmap.getWidth() / 2, originalBitmap.getHeight() / 2, false);
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-        markerOptions.position(location);
-        markerOptions.anchor(0.5f, 0.5f);
-        this.markerOptions[numberOfMarkers] = markerOptions;
-        numberOfMarkers++;
-        refreshMarkers();
+        if (isAdded()) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), drawableRes);
+            Bitmap bitmap = Bitmap.createScaledBitmap(originalBitmap, originalBitmap.getWidth() / 2, originalBitmap.getHeight() / 2, false);
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            markerOptions.position(location);
+            markerOptions.anchor(0.5f, 0.5f);
+            this.markerOptions[numberOfMarkers] = markerOptions;
+            numberOfMarkers++;
+            refreshMarkers();
+        }
     }
 
     @Override
@@ -164,8 +163,6 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
             }
         });
 
-        addLandmark(tennisCourt, R.drawable.marker_tennis);
-        addLandmark(carParking, R.drawable.marker_parking);
     }
 
     @Override
@@ -312,27 +309,29 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (myLocationShown && mainActivity != null && mainActivity.appRunning) {
-                        mainActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                rotationCounter++;
-                                rotationCounter = rotationCounter % 90;
-                                if (myMarker != null)
-                                    myMarker.remove();
-                                if (partnerMarker != null)
-                                    partnerMarker.remove();
-                                if (myMarkerOption != null)
-                                    myMarkerOption.rotation(rotationCounter * 4);
-                                if (partnerMarkerOption != null)
-                                    partnerMarkerOption.rotation(rotationCounter * 4);
-                                showPlayerLocationMarkers();
+                    while (myLocationShown && mainActivity != null) {
+                        if (mainActivity.appRunning) {
+                            mainActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rotationCounter++;
+                                    rotationCounter = rotationCounter % 90;
+                                    if (myMarker != null)
+                                        myMarker.remove();
+                                    if (partnerMarker != null)
+                                        partnerMarker.remove();
+                                    if (myMarkerOption != null)
+                                        myMarkerOption.rotation(rotationCounter * 4);
+                                    if (partnerMarkerOption != null)
+                                        partnerMarkerOption.rotation(rotationCounter * 4);
+                                    showPlayerLocationMarkers();
+                                }
+                            });
+                            try {
+                                Thread.sleep(80);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        });
-                        try {
-                            Thread.sleep(80);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
                         }
                     }
                 }
