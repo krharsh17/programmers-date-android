@@ -1,0 +1,114 @@
+<html>
+<head>
+	<title>Team List</title>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
+<script type="text/javascript">
+	var firebaseConfig = {
+    apiKey: "AIzaSyCyiMhn3q7TlgUAxzj9MnANDFFaG_TD5ls",
+    authDomain: "programmers-date.firebaseapp.com",
+    databaseURL: "https://programmers-date.firebaseio.com",
+    projectId: "programmers-date",
+    storageBucket: "programmers-date.appspot.com",
+    messagingSenderId: "285187162071",
+    appId: "1:285187162071:web:877682047df13250fed592",
+    measurementId: "G-X4XNEW671M"
+  };
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  var database = firebase.database().ref("couples");
+  var id = "";
+  var detailed = false;
+  database.on('value', function(snapshot) {
+  	$("#main").empty();
+  	var content = "<thead><tr><th>Team ID</th><th>Current Level</th><th>Team Progress</th></tr></thead><tbody>";
+  	snapshot.forEach(function(coupleSnapshot){
+  		id = coupleSnapshot.val().id;
+  		console.log(coupleSnapshot.val().currentLevel);
+  		content = content +  "<tr onClick='rowClick(this.id)' id='"+id+"'><td onClick='idClick(this.id)' id='"+id+"'>"+coupleSnapshot.val().id+"</td><td>"+coupleSnapshot.val().currentLevel+"</td><td>";
+  		for(var i=0;i<10;i++){
+  			if(!coupleSnapshot.val().levels[i].skipped){
+  				if((i+1)<parseInt(coupleSnapshot.val().currentLevel)){
+  					content = content + "<img style='height: 50px;width: 50px;' src='tick.png'>"
+  				}else if((i+1)>parseInt(coupleSnapshot.val().currentLevel)){
+  					content = content + "<img style='height: 50px;width: 50px;' src='locked.png'>"
+  				}else{
+  					content = content + "<img style='height: 50px;width: 50px;' src='unlocked.png'>"
+  				}
+  			}else{
+  				content = content + "<img style='height: 50px;width: 50px;' src='cross.png'>"
+  			}
+  		}
+  		content = content + "</td></tr>";
+  	});
+  	content = content + "</tbody>";
+  	$("#main").append(content);
+});
+  function rowClick(id){
+  	if(detailed==false){
+  		detailed = true;
+  		database.on('value', function(snapshot){
+  		$("#main").empty();
+  		var content = "<thead><tr><th>Team ID</th><th>Current Level</th><th>Team Progress</th><th>Player 1 Name</th><th>Player 2 Name</th><th>Player 1 Roll</th><th>Player 2 Roll</th></tr></thead><tbody>";
+  		snapshot.forEach(function(coupleSnapshot){
+  			idreceive = coupleSnapshot.val().id;
+  			if(idreceive == id){
+  				content = content +  "<tr onClick='rowClick(this.id)' id='"+idreceive+"'><td onClick='idClick(this.id)' id='"+idreceive+"'>"+coupleSnapshot.val().id+"</td><td>"+coupleSnapshot.val().currentLevel+"</td><td>";
+  		for(var i=0;i<10;i++){
+  			if(!coupleSnapshot.val().levels[i].skipped){
+  				if((i+1)<parseInt(coupleSnapshot.val().currentLevel)){
+  					content = content + "<img style='height: 50px;width: 50px;' src='tick.png'>"
+  				}else if((i+1)>parseInt(coupleSnapshot.val().currentLevel)){
+  					content = content + "<img style='height: 50px;width: 50px;' src='locked.png'>"
+  				}else{
+  					content = content + "<img style='height: 50px;width: 50px;' src='unlocked.png'>"
+  				}
+  			}else{
+  				content = content + "<img style='height: 50px;width: 50px;' src='cross.png'>"
+  			}
+  		}
+  		content = content + "</td><td>"+coupleSnapshot.val().player1Name+"</td><td>"+coupleSnapshot.val().player2Name+"</td><td>"+coupleSnapshot.val().player1Roll+"</td><td>"+coupleSnapshot.val().player2Roll+"</td></tr>";
+  			}else{
+  				content = content +  "<tr onClick='rowClick(this.id)' id='"+idreceive+"'><td onClick='idClick(this.id)' id='"+idreceive+"'>"+coupleSnapshot.val().id+"</td><td>"+coupleSnapshot.val().currentLevel+"</td><td>";
+  		for(var i=0;i<10;i++){
+  			if(!coupleSnapshot.val().levels[i].skipped){
+  				if((i+1)<parseInt(coupleSnapshot.val().currentLevel)){
+  					content = content + "<img style='height: 50px;width: 50px;' src='tick.png'>"
+  				}else if((i+1)>parseInt(coupleSnapshot.val().currentLevel)){
+  					content = content + "<img style='height: 50px;width: 50px;' src='locked.png'>"
+  				}else{
+  					content = content + "<img style='height: 50px;width: 50px;' src='unlocked.png'>"
+  				}
+  			}else{
+  				content = content + "<img style='height: 50px;width: 50px;' src='cross.png'>"
+  			}
+  		}
+  		content = content + "</td></tr>";
+  			}
+  		});
+  		content = content + "</tbody>";
+  	$("#main").append(content);
+  	});
+  	}else{
+  		detailed = false;
+  		window.location.reload(true);
+  	}
+  }
+ function idClick(id){
+ 	window.localStorage.setItem("id",id);
+ 	window.location.href="editDetails.html";
+ }
+</script>
+<table class="table" id="main"></table>
+<div></div>
+</body>
+</html>
