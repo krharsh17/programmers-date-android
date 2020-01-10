@@ -127,6 +127,7 @@ public class DetailFragment extends Fragment implements Constants {
 
                 }
             });
+
     }
 
     public void skipLevel() {

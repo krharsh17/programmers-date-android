@@ -72,7 +72,6 @@ public interface Constants {
     String miniAuditoriumText = "Mini Auditorium";
 
 
-
     LatLngBounds NITP_BOUNDS = new LatLngBounds(new LatLng(25.619097, 85.170036),
             new LatLng(25.621264, 85.175347));
 
@@ -93,5 +92,17 @@ public interface Constants {
     int numLocs = 1;
 
     long timeLimit = 1000 * 60 * 60 * 3;
+
+
+    /**
+     * Request camera and external storage permission.
+     */
+    int REQUEST_CAMERA_PERMISSION = 1;
+
+    /**
+     * Model input shape for images.
+     */
+    int MODEL_WIDTH = 257;
+    int MODEL_HEIGHT = 257;
 
 }

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
 
 android {
@@ -17,6 +19,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    aaptOptions {
+        noCompress "tflite"
     }
 }
 
@@ -45,8 +50,14 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
     implementation 'io.supercharge:funnyloader:0.2.0'
     implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.github.krharsh17:posenet:master-SNAPSHOT'
     implementation project(path: ':openCVLibrary341')
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
