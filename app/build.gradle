@@ -51,6 +51,7 @@ dependencies {
     implementation 'io.supercharge:funnyloader:0.2.0'
     implementation 'com.google.android.material:material:1.2.0-alpha02'
     implementation 'com.github.krharsh17:posenet:master-SNAPSHOT'
+    implementation 'com.journeyapps:zxing-android-embedded:3.3.0'
     implementation project(path: ':openCVLibrary341')
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

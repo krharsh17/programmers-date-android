@@ -6,4 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".events.QRActivity">
 
+    <com.journeyapps.barcodescanner.BarcodeView
+        android:id="@+id/scan_result_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:zxing_preview_scaling_strategy="fitXY"
+        app:zxing_use_texture_view="false" />
+
+    <TextView
+        android:id="@+id/scanning_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poiretone"
+        android:text="Scanning..."
+        android:textColor="#B7CDFA"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/crosshair"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/crosshair"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/qr_crosshair"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

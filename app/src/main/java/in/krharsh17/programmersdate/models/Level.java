@@ -11,14 +11,14 @@ public class Level {
     private String poseValue;
     private String logoValue;
     private String audioValue;
-    private boolean isSkipped;
+    private boolean skipped;
 
     public boolean isSkipped() {
-        return isSkipped;
+        return skipped;
     }
 
     public void setSkipped(boolean skipped) {
-        isSkipped = skipped;
+        this.skipped = skipped;
     }
 
 
@@ -41,7 +41,7 @@ public class Level {
     public Level(int levelNumber, String taskType, boolean isSkipped ) {
         this.levelNumber = levelNumber;
         this.taskType = taskType;
-        this.isSkipped = isSkipped;
+        this.skipped = isSkipped;
     }
 
     public ArrayList<String> getLocations() {
