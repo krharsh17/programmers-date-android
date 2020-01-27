@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
+<script type="text/javascript">
+	var id = window.localStorage.getItem("id");
+	var firebaseConfig = {
+    apiKey: "AIzaSyCyiMhn3q7TlgUAxzj9MnANDFFaG_TD5ls",
+    authDomain: "programmers-date.firebaseapp.com",
+    databaseURL: "https://programmers-date.firebaseio.com",
+    projectId: "programmers-date",
+    storageBucket: "programmers-date.appspot.com",
+    messagingSenderId: "285187162071",
+    appId: "1:285187162071:web:877682047df13250fed592",
+    measurementId: "G-X4XNEW671M"
+  };
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  var database = firebase.database().ref("couples/"+String(id));
+  database.on('value', function(snapshot) {
+
+  		document.getElementById("id").value = snapshot.val().id;
+  		document.getElementById("currentLevel").value = ""+snapshot.val().currentLevel;
+  		document.getElementById("p1n").value = snapshot.val().player1Name;
+  		document.getElementById("p2n").value = snapshot.val().player2Name;
+  		document.getElementById("p1r").value = snapshot.val().player1Roll;
+  		document.getElementById("p2r").value = snapshot.val().player2Roll;
+  		document.getElementById("p1la").value = snapshot.val().player1Location[0];
+  		document.getElementById("p1lo").value = snapshot.val().player1Location[1];
+  		document.getElementById("p2la").value = snapshot.val().player2Location[0];
+  		document.getElementById("p2lo").value = snapshot.val().player2Location[1];
+
+  	});
+ function editDetails(){
+ 	var database = firebase.database().ref().child("couples/"+String(id));
+ 	database.update({
+ 		id: document.getElementById("id").value,
+ 		currentLevel: document.getElementById("currentLevel").value,
+ 		player1Name: document.getElementById("p1n").value,
+ 		player2Name: document.getElementById("p2n").value,
+ 		player1Roll: parseInt(document.getElementById("p1r").value),
+ 		player2Roll: parseInt(document.getElementById("p2r").value)
+ 	});
+ 	window.location.href="console.html";
+ }
+</script>
+<div class="container">
+  <h2>Team Details</h2>
+  <form>
+    <div class="form-group">
+      <label for="email">Team ID:</label>
+      <input type="text" class="form-control" id="id" placeholder="id" name="email">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Current Level:</label>
+      <input type="text" class="form-control" id="currentLevel" placeholder="currentLevel" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 1 Name:</label>
+      <input type="text" class="form-control" id="p1n" placeholder="player1Name" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 2 Name:</label>
+      <input type="text" class="form-control" id="p2n" placeholder="player2Name" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 1 Roll:</label>
+      <input type="text" class="form-control" id="p1r" placeholder="player1Roll" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 2 Roll:</label>
+      <input type="text" class="form-control" id="p2r" placeholder="player2Roll" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 1 Latitude:</label>
+      <input type="text" class="form-control" id="p1la" placeholder="player1Lat" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 1 Longitude:</label>
+      <input type="text" class="form-control" id="p1lo" placeholder="player1Long" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 2 Latitude:</label>
+      <input type="text" class="form-control" id="p2la" placeholder="player2Lat" name="pwd">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Player 2 Longitude:</label>
+      <input type="text" class="form-control" id="p2lo" placeholder="player2Long" name="pwd">
+    </div>
+  </form>
+  <button onclick="editDetails()" class="btn btn-success">Apply Changes</button>
+</div>
+</body>
+</html>
