@@ -5,11 +5,10 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
-
 import in.krharsh17.programmersdate.events.posenet.PosenetActivity;
 
+public class PoseActivity extends AppCompatActivity {
 
     PosenetActivity posenetActivity;
 

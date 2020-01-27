@@ -1,5 +1,6 @@
 package in.krharsh17.programmersdate.home;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,17 +26,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
-
+import in.krharsh17.programmersdate.SharedPrefManager;
+import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.events.PoseActivity;
+import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
+import in.krharsh17.programmersdate.home.managers.CoupleManager;
+import in.krharsh17.programmersdate.models.Couple;
 import in.krharsh17.programmersdate.models.Level;
 
 public class MainActivity extends AppCompatActivity implements Constants {
