@@ -5,12 +5,22 @@ import java.util.ArrayList;
 public class Level {
     private int levelNumber;
     private String taskType;
-    private ArrayList<ArrayList<Double>> locations;
+    private ArrayList<String> locations;
     private String qrValue;
     private String barValue;
     private String poseValue;
     private String logoValue;
     private String audioValue;
+    private boolean skipped;
+
+    public boolean isSkipped() {
+        return skipped;
+    }
+
+    public void setSkipped(boolean skipped) {
+        this.skipped = skipped;
+    }
+
 
     public int getLevelNumber() {
         return levelNumber;
@@ -28,16 +38,17 @@ public class Level {
         this.taskType = taskType;
     }
 
-    public Level(int levelNumber, String taskType) {
+    public Level(int levelNumber, String taskType, boolean isSkipped ) {
         this.levelNumber = levelNumber;
         this.taskType = taskType;
+        this.skipped = isSkipped;
     }
 
-    public ArrayList<ArrayList<Double>> getLocations() {
+    public ArrayList<String> getLocations() {
         return locations;
     }
 
-    public void setLocations(ArrayList<ArrayList<Double>> locations) {
+    public void setLocations(ArrayList<String> locations) {
         this.locations = locations;
     }
 
@@ -79,5 +90,9 @@ public class Level {
 
     public void setAudioValue(String audioValue) {
         this.audioValue = audioValue;
+    }
+
+    public Level(){
+
     }
 }

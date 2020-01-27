@@ -1,6 +1,10 @@
 package in.krharsh17.programmersdate.models;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
+
+import in.krharsh17.programmersdate.Constants;
 
 public class Couple {
 
@@ -13,6 +17,15 @@ public class Couple {
     private ArrayList<Double> player1Location;
     private ArrayList<Double> player2Location;
     private ArrayList<Level> levels;
+    private long timeLimit = Constants.timeLimit;
+
+    public long getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
+    }
 
     public ArrayList<Level> getLevels() {
         return levels;
@@ -84,5 +97,9 @@ public class Couple {
 
     public void setPlayer2Location(ArrayList<Double> player2Location) {
         this.player2Location = player2Location;
+    }
+
+    public static LatLng getLatLng(ArrayList<Double> location) {
+        return new LatLng(location.get(0), location.get(1));
     }
 }

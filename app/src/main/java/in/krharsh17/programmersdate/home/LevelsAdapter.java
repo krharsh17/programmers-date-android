@@ -46,8 +46,11 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
         final Level level = levels.get(position);
         viewHolders.add(holder);
         if(level.getLevelNumber()<currentLevel){
-
-            setCompleted(holder,level);
+            if (level.isSkipped()==true){
+                setSkipped(holder,level);
+            }else {
+                setCompleted(holder, level);
+            }
 
         }else if (level.getLevelNumber()==currentLevel){
 
@@ -82,6 +85,12 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
     public void setLocked(ViewHolder viewHolder, Level level){
         viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
         viewHolder.levelIcon.setImageResource(R.drawable.level_locked_icon);
+        viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+    }
+
+    public void setSkipped(ViewHolder viewHolder, Level level){
+        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
+        viewHolder.levelIcon.setImageResource(R.drawable.app_logo);
         viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
     }
 

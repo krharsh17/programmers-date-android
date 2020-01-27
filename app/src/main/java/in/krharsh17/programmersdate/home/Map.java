@@ -61,6 +61,8 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
 
     private Marker myMarker, partnerMarker;
 
+    private MainActivity mainActivity;
+
     public Map() {
 
     }
@@ -99,15 +101,17 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
     }
 
     public void addLandmark(LatLng location, int drawableRes) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), drawableRes);
-        Bitmap bitmap = Bitmap.createScaledBitmap(originalBitmap, originalBitmap.getWidth() / 2, originalBitmap.getHeight() / 2, false);
-        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
-        markerOptions.position(location);
-        markerOptions.anchor(0.5f, 0.5f);
-        this.markerOptions[numberOfMarkers] = markerOptions;
-        numberOfMarkers++;
-        refreshMarkers();
+        if (isAdded()) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), drawableRes);
+            Bitmap bitmap = Bitmap.createScaledBitmap(originalBitmap, originalBitmap.getWidth() / 2, originalBitmap.getHeight() / 2, false);
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+            markerOptions.position(location);
+            markerOptions.anchor(0.5f, 0.5f);
+            this.markerOptions[numberOfMarkers] = markerOptions;
+            numberOfMarkers++;
+            refreshMarkers();
+        }
     }
 
     @Override
@@ -143,13 +147,29 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
 
         focusMap(mainBuilding);
 
-        addLandmark(tennisCourt, R.drawable.marker_tennis);
-        addLandmark(carParking, R.drawable.marker_parking);
+        map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+                Log.i(TAG, "onCameraMoveStarted: " + i);
+                if (i == REASON_GESTURE)
+                    mainActivity.hideOverlays();
+            }
+        });
+
+        map.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                mainActivity.showOverlays();
+            }
+        });
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        mainActivity = (MainActivity) getActivity();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
 
@@ -289,27 +309,29 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (myLocationShown) {
-                        Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                rotationCounter++;
-                                rotationCounter = rotationCounter % 90;
-                                if (myMarker != null)
-                                    myMarker.remove();
-                                if (partnerMarker != null)
-                                    partnerMarker.remove();
-                                if (myMarkerOption != null)
-                                    myMarkerOption.rotation(rotationCounter * 4);
-                                if (partnerMarkerOption != null)
-                                    partnerMarkerOption.rotation(rotationCounter * 4);
-                                showPlayerLocationMarkers();
+                    while (myLocationShown && mainActivity != null) {
+                        if (mainActivity.appRunning) {
+                            mainActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rotationCounter++;
+                                    rotationCounter = rotationCounter % 90;
+                                    if (myMarker != null)
+                                        myMarker.remove();
+                                    if (partnerMarker != null)
+                                        partnerMarker.remove();
+                                    if (myMarkerOption != null)
+                                        myMarkerOption.rotation(rotationCounter * 4);
+                                    if (partnerMarkerOption != null)
+                                        partnerMarkerOption.rotation(rotationCounter * 4);
+                                    showPlayerLocationMarkers();
+                                }
+                            });
+                            try {
+                                Thread.sleep(80);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                        });
-                        try {
-                            Thread.sleep(80);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
                         }
                     }
                 }

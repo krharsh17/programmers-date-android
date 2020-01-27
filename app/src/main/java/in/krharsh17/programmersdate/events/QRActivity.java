@@ -1,6 +1,5 @@
 package in.krharsh17.programmersdate.events;
 
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +19,13 @@ import java.util.Collection;
 import java.util.List;
 
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.home.MainActivity;
+import in.krharsh17.programmersdate.home.managers.CoupleManager;
+import in.krharsh17.programmersdate.models.Couple;
+import in.krharsh17.programmersdate.models.Level;
+
+import static in.krharsh17.programmersdate.Constants.couplesRef;
 
 public class QRActivity extends AppCompatActivity {
     public BarcodeView barcodeView;
@@ -28,16 +34,21 @@ public class QRActivity extends AppCompatActivity {
     private TextView status;
     private ImageView crosshair;
     private int currentLevel;
+    private String codeValueActual,coupleId;
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             lastText = result.getText();
 
+            Log.i("resulthere",lastText);
+            if(lastText.equals(codeValueActual)){
+                levelSuccess();
+            }
             //handle result here
 
             beepManager.setVibrateEnabled(true);
             beepManager.setBeepEnabled(true);
-            beepManager.playBeepSoundAndVibrate();
+
         }
 
         @Override
@@ -56,7 +67,25 @@ public class QRActivity extends AppCompatActivity {
         barcodeView.setDecoderFactory(new DefaultDecoderFactory(formats, null, null));
         barcodeView.decodeContinuous(callback);
         beepManager = new BeepManager(this);
-        currentLevel = getIntent().getIntExtra("currentLevel", 0);
+        CoupleManager coupleManager = new CoupleManager(this);
+        coupleManager.getCouple().setOnFetchedListener(new CoupleManager.OnFetchedListener() {
+            @Override
+            public void onCoupleFetched(Couple couple) {
+                coupleId = couple.getId();
+                currentLevel = couple.getCurrentLevel();
+                Level level =  couple.getLevels().get(currentLevel-1);
+                if(level.getTaskType().equals("QR")){
+                    codeValueActual = level.getQrValue();
+                }else if(level.getTaskType().equals("BAR")){
+                    codeValueActual = level.getBarValue();
+                }
+            }
+
+            @Override
+            public void onErrorOccured(String message) {
+
+            }
+        });
 
     }
 
@@ -75,5 +104,19 @@ public class QRActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+
+    }
+
+    public void levelSuccess(){
+        couplesRef.child(coupleId).child("currentLevel").setValue(currentLevel+1);
+        ViewUtils.showToast(this,"Level completed successfully",ViewUtils.DURATION_LONG);
+        onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(QRActivity.this, MainActivity.class);
+        startActivity(intent);
+        QRActivity.this.finish();
     }
 }

@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+import in.krharsh17.programmersdate.Constants;
+
 public class BottomPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<DetailFragment> fragments;

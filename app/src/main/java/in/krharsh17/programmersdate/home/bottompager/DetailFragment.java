@@ -14,10 +14,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.ViewUtils;
+import in.krharsh17.programmersdate.events.AudioActivity;
 import in.krharsh17.programmersdate.events.BarActivity;
 import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.events.PoseActivity;
 import in.krharsh17.programmersdate.events.QRActivity;
+import in.krharsh17.programmersdate.home.MainActivity;
 
 
 /**
@@ -56,6 +59,8 @@ public class DetailFragment extends Fragment implements Constants {
                     info.setText(helpTextQR);
                     break;
                 case taskTypeTwister:
+                    begin.setImageResource(R.drawable.task_logo_icon);
+                    info.setText(helpTextTwister);
                     break;
             }
         }
@@ -76,6 +81,17 @@ public class DetailFragment extends Fragment implements Constants {
         info = getView().findViewById(R.id.task_detail_info);
         if (taskType != null)
             setTaskType(taskType, 1);
+        getView().findViewById(R.id.task_detail_skip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewUtils.showConfirmationDialog(getActivity(), "Are you sure you want to skip the level?", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        skipLevel();
+                    }
+                }, null);
+            }
+        });
 
         if (taskType != null)
             begin.setOnClickListener(new View.OnClickListener() {
@@ -103,10 +119,18 @@ public class DetailFragment extends Fragment implements Constants {
                             startActivity(qrIntent);
                             break;
                         case taskTypeTwister:
+                            Intent twisterIntent = new Intent(getActivity(), AudioActivity.class);
+                            twisterIntent.putExtra("currentLevel", currentLevel);
+                            startActivity(twisterIntent);
                             break;
                     }
 
                 }
             });
+
+    }
+
+    public void skipLevel() {
+        ((MainActivity) getActivity()).skipCurrentLevel();
     }
 }
