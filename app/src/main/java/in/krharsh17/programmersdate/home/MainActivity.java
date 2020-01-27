@@ -1,7 +1,7 @@
 package in.krharsh17.programmersdate.home;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -25,16 +25,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import java.util.ArrayList;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
-import in.krharsh17.programmersdate.SharedPrefManager;
-import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
-import in.krharsh17.programmersdate.home.bottompager.DetailFragment;
-import in.krharsh17.programmersdate.home.managers.CoupleManager;
-import in.krharsh17.programmersdate.models.Couple;
+
 import in.krharsh17.programmersdate.models.Level;
 
 public class MainActivity extends AppCompatActivity implements Constants {
@@ -67,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements Constants {
         setContentView(R.layout.activity_main);
         init();
         run();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(MainActivity.this, PoseActivity.class));
+            }
+        }, 2000);
 
     }
 
@@ -244,13 +252,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
     @SuppressLint("ClickableViewAccessibility")
     void setupBottomPager() {
 
-        BottomPagerAdapter bottomPagerAdapter = new BottomPagerAdapter(getSupportFragmentManager());
-        ArrayList<DetailFragment> frags = new ArrayList<>();
-        for (int i = 1; i <= numLevels; i++) {
-            frags.add(new DetailFragment().setTaskType(currentCouple.getLevels().get(i - 1).getTaskType(), i));
-        }
-        bottomPagerAdapter.setFragments(frags);
-        bottomPager.setAdapter(bottomPagerAdapter);
+
+        bottomPager.setAdapter(new BottomPagerAdapter(getSupportFragmentManager()));
+
 
         bottomPager.setPadding(
                 (Math.round(getResources().getDisplayMetrics().widthPixels - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 288, getResources().getDisplayMetrics())) / 2),

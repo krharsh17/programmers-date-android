@@ -1,8 +1,5 @@
 package in.krharsh17.programmersdate.events;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,7 +48,7 @@ public class QRActivity extends AppCompatActivity {
 
             beepManager.setVibrateEnabled(true);
             beepManager.setBeepEnabled(true);
-//            beepManager.playBeepSoundAndVibrate();
+
         }
 
         @Override
@@ -107,6 +104,7 @@ public class QRActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+
     }
 
     public void levelSuccess(){

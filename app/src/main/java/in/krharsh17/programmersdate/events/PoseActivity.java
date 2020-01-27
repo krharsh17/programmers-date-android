@@ -5,10 +5,11 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
+
 import in.krharsh17.programmersdate.events.posenet.PosenetActivity;
 
-public class PoseActivity extends AppCompatActivity {
 
     PosenetActivity posenetActivity;
 
@@ -17,6 +18,7 @@ public class PoseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pose);
 
+
         posenetActivity = new PosenetActivity();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.camera_preview_pose, posenetActivity)
@@ -24,7 +26,6 @@ public class PoseActivity extends AppCompatActivity {
 
 
         FrameLayout preview = findViewById(R.id.camera_preview_pose);
-//        ImageView poseImage = findViewById(R.id.pose_image);
 
     }
 
