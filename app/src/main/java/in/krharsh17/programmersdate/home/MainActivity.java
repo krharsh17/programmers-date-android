@@ -32,7 +32,7 @@ import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.events.PoseActivity;
+import in.krharsh17.programmersdate.events.AudioActivity;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
 import in.krharsh17.programmersdate.models.Couple;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(MainActivity.this, PoseActivity.class));
+                startActivity(new Intent(MainActivity.this, AudioActivity.class));
             }
         }, 2000);
 

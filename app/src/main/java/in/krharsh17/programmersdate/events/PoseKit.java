@@ -20,6 +20,11 @@ import java.util.HashMap;
 import static com.google.firebase.ml.custom.FirebaseModelDataType.FLOAT32;
 import static in.krharsh17.programmersdate.Constants.TAG;
 
+/**
+ * @see PoseKit
+ * uses mlkit to load local tflite model
+ * to be used when posenet poses problems
+ **/
 public class PoseKit {
 
     FirebaseCustomLocalModel model;

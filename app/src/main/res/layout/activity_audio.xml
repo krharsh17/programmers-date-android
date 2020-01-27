@@ -3,28 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:layout_height="match_parent"
     tools:context=".events.AudioActivity">
 
-    <Button
-        android:id="@+id/audio_button"
-        android:layout_width="108dp"
-        android:layout_height="80dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@font/raleway_medium"
+        android:text="Tongue Twister Level"
+        android:textColor="#DDDDDD"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
 
     <TextView
-        android:id="@+id/speech_text"
-        android:layout_width="406dp"
-        android:layout_height="70dp"
-        android:text="TextView"
-        android:textSize="15sp"
+        android:id="@+id/twister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:fontFamily="@font/raleway_medium"
+        android:text="Loading twister..."
+        android:textColor="#DDDDDD"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/start_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <com.aar.tapholdupbutton.TapHoldUpButton
+        android:id="@+id/start_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:thub_circleColor="#DDDDDD"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/audio_button"
-        tools:text="@android:string/emptyPhoneNumber" />
+        app:thub_circleColorOhHold="@color/colorAccent"
+        app:thub_circleGap="3dp"
+        app:thub_ringColor="#DDDDDD"
+        app:thub_ringStrokeWidth="3dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
