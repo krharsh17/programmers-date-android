@@ -2,6 +2,7 @@ package `in`.krharsh17.programmersdate.events.posenet
 
 import `in`.krharsh17.programmersdate.Constants.*
 import `in`.krharsh17.programmersdate.R
+import `in`.krharsh17.programmersdate.events.CanvasToBitmap
 import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
@@ -69,11 +70,15 @@ class PosenetActivity :
     /** An object for the Posenet library.    */
     private lateinit var posenet: Posenet
 
+    public var bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888)
+
+    public var canvas = Canvas()
+
     /** ID of the current [CameraDevice].   */
     private var cameraId: String? = null
 
     /** A [SurfaceView] for camera preview.   */
-    private var surfaceView: SurfaceView? = null
+    public var surfaceView: SurfaceView? = null
 
     /** A [CameraCaptureSession] for camera preview.   */
     private var captureSession: CameraCaptureSession? = null
@@ -474,6 +479,7 @@ class PosenetActivity :
 
     /** Draw bitmap on Canvas.   */
     private fun draw(canvas: Canvas, person: Person?, bitmap: Bitmap) {
+        val canvas2 = Canvas(this.bitmap)
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         // Draw `bitmap` and `person` in square canvas.
         val screenWidth: Int
@@ -514,6 +520,7 @@ class PosenetActivity :
                     val adjustedX: Float = position.x.toFloat() * widthRatio + left
                     val adjustedY: Float = position.y.toFloat() * heightRatio + top
                     canvas.drawCircle(adjustedX, adjustedY, circleRadius, paint)
+                    canvas2.drawCircle(adjustedX, adjustedY, circleRadius, paint)
                 }
             }
 
@@ -529,32 +536,24 @@ class PosenetActivity :
                             person.keyPoints[line.second.ordinal].position.y.toFloat() * heightRatio + top,
                             paint
                     )
+                    canvas2.drawLine(
+                            person.keyPoints[line.first.ordinal].position.x.toFloat() * widthRatio + left,
+                            person.keyPoints[line.first.ordinal].position.y.toFloat() * heightRatio + top,
+                            person.keyPoints[line.second.ordinal].position.x.toFloat() * widthRatio + left,
+                            person.keyPoints[line.second.ordinal].position.y.toFloat() * heightRatio + top,
+                            paint
+                    )
                 }
             }
 
-//
-//            canvas.drawText(
-//                    "Score: %.2f".format(person.score),
-//                    (15.0f * widthRatio),
-//                    (30.0f * heightRatio + bottom),
-//                    paint
-//            )
-        }
-//        canvas.drawText(
-//                "Device: %s".format(posenet.device),
-//                (15.0f * widthRatio),
-//                (50.0f * heightRatio + bottom),
-//                paint
-//        )
-//        canvas.drawText(
-//                "Time: %.2f ms".format(posenet.lastInferenceTimeNanos * 1.0f / 1_000_000),
-//                (15.0f * widthRatio),
-//                (70.0f * heightRatio + bottom),
-//                paint
-//        )
 
-        // Draw!
+        }
+
         surfaceHolder!!.unlockCanvasAndPost(canvas)
+        val canvasToBit = CanvasToBitmap(context,person)
+        this.bitmap = canvasToBit.bitmap
+        this.canvas = canvas2
+        //canvas2.setBitmap(this.bitmap)
     }
 
     /** Process image using Posenet library.   */
@@ -680,4 +679,6 @@ class PosenetActivity :
          */
         private const val TAG = "PosenetActivity"
     }
+
+
 }
