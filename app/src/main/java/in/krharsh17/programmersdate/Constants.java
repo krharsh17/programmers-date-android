@@ -91,21 +91,15 @@ public interface Constants {
     String taskTypePose = "POSE";
     String taskTypeTwister = "TWISTER";
 
+    int MODEL_WIDTH = 257;
+    int MODEL_HEIGHT = 257;
+
+    String TAG = "DEBUG";
     int numLevels = 10;
     int numLocs = 1;
 
     long timeLimit = 1000 * 60 * 60 * 3;
 
-
-    /**
-     * Request camera and external storage permission.
-     */
     int REQUEST_CAMERA_PERMISSION = 1;
-
-    /**
-     * Model input shape for images.
-     */
-    int MODEL_WIDTH = 257;
-    int MODEL_HEIGHT = 257;
 
 }

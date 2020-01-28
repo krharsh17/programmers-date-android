@@ -106,7 +106,6 @@ public class PoseActivity extends AppCompatActivity {
 
 
         FrameLayout preview = findViewById(R.id.camera_preview_pose);
-//        ImageView poseImage = findViewById(R.id.pose_image);
 
     }
 

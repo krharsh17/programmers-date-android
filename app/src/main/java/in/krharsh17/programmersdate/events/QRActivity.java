@@ -51,7 +51,6 @@ public class QRActivity extends AppCompatActivity {
 
             beepManager.setVibrateEnabled(true);
             beepManager.setBeepEnabled(true);
-//            beepManager.playBeepSoundAndVibrate();
         }
 
         @Override
@@ -107,6 +106,7 @@ public class QRActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+
     }
 
     public void levelSuccess(){
