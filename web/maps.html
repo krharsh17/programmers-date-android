@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div  class="content">
+    	<button onclick="nextPage()" class="btn btn-success"> 
+        View Team Details
+        </button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-database.js"></script>
+    <script type="text/javascript">
+    	function initMap(){
+    	var markers = [];
+    	var firebaseConfig = {
+    apiKey: "AIzaSyCyiMhn3q7TlgUAxzj9MnANDFFaG_TD5ls",
+    authDomain: "programmers-date.firebaseapp.com",
+    databaseURL: "https://programmers-date.firebaseio.com",
+    projectId: "programmers-date",
+    storageBucket: "programmers-date.appspot.com",
+    messagingSenderId: "285187162071",
+    appId: "1:285187162071:web:877682047df13250fed592",
+    measurementId: "G-X4XNEW671M"
+  };
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+  var nitp = {lat: 25.6207, lng: 85.1729};
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 19, center: nitp});
+  var database = firebase.database().ref("couples");
+  database.once('value', function(snapshot) {
+  	snapshot.forEach(function(coupleSnapshot){
+  		markers.push(new google.maps.Marker({
+            position: {lat: coupleSnapshot.val().player1Location[0], lng: coupleSnapshot.val().player1Location[1]},
+            label: String(coupleSnapshot.val().id + " " + coupleSnapshot.val().player1Name),
+            map: map
+          }));
+    	markers.push(new google.maps.Marker({
+            position: {lat: coupleSnapshot.val().player2Location[0], lng: coupleSnapshot.val().player2Location[1]},
+            label: String(coupleSnapshot.val().id + " " + coupleSnapshot.val().player2Name),
+            map: map
+          }));
+  	});
+});
+  database.on('value', function(snapshot) {
+  	var i=-1;
+  	snapshot.forEach(function(coupleSnapshot){
+  		position = new google.maps.LatLng(coupleSnapshot.val().player1Location[0], coupleSnapshot.val().player1Location[1]);
+        markers[++i].setPosition(position);
+    	position = new google.maps.LatLng(coupleSnapshot.val().player2Location[0], coupleSnapshot.val().player2Location[1]);
+        markers[++i].setPosition(position);
+  	});
+});
+}
+function nextPage(){
+	window.location.href="console.html";
+}
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"
+    async defer></script>
+  </body>
+</html>
