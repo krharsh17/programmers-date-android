@@ -51,7 +51,6 @@ public class QRActivity extends AppCompatActivity {
 
             beepManager.setVibrateEnabled(true);
             beepManager.setBeepEnabled(true);
-
         }
 
         @Override
