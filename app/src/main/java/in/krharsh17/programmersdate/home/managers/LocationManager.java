@@ -30,11 +30,20 @@ public class LocationManager {
         rollNo = new SharedPrefManager(context).getRollNumber();
     }
 
-    public static double distance(double lat1, double lng1,
-                                  double lat2, double lng2) {
-        double a = (lat1 - lat2) * LocationManager.distPerLat(lat1);
-        double b = (lng1 - lng2) * LocationManager.distPerLng(lat1);
-        return Math.sqrt(a * a + b * b);
+//    public static double distance(double lat1, double lng1,
+//                                  double lat2, double lng2) {
+    public static boolean distance(ArrayList<LatLng> latLngs,double lat2, double lng2) {
+        for(LatLng latLng : latLngs){
+            double lat1 = latLng.latitude;
+            double lng1 = latLng.longitude;
+            double a = (lat1 - lat2) * LocationManager.distPerLat(lat1);
+            double b = (lng1 - lng2) * LocationManager.distPerLng(lat1);
+            double dist = Math.sqrt(a * a + b * b);
+            if(dist < 50){
+                return true;
+            }
+        }
+        return false;
     }
 
     private static double distPerLng(double lat) {

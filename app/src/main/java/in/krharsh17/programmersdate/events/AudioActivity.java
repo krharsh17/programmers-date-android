@@ -61,6 +61,9 @@ public class AudioActivity extends AppCompatActivity {
                 currentlevel = couple.getCurrentLevel();
                 Level level =  couple.getLevels().get(currentlevel-1);
                 actualTwister = level.getAudioValue();
+                for(int i=0;i<9;i++){
+                    actualTwister = actualTwister + " " + level.getAudioValue();
+                }
             }
 
             @Override
