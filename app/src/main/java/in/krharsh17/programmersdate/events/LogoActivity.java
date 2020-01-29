@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +18,7 @@ import com.aar.tapholdupbutton.TapHoldUpButton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.peekandpop.shalskar.peekandpop.PeekAndPop;
 
 import org.opencv.core.DMatch;
 import org.opencv.core.Mat;
@@ -48,6 +51,8 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     boolean isSuccess = false, safeToCapture = false;
     Handler handler;
     private TapHoldUpButton hint;
+    TextView hintText;
+    PeekAndPop peekAndPop;
 
     public static Camera getCameraInstance() {
         Camera c = null;
@@ -70,6 +75,13 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
+        hint = findViewById(R.id.hint_button);
+        peekAndPop = new PeekAndPop.Builder(this)
+                .peekLayout(R.layout.dialog_hint)
+                .longClickViews(hint)
+                .build();
+        View peekView = peekAndPop.getPeekView();
+        hintText = peekView.findViewById(R.id.hint_text);
         mCamera = getCameraInstance();
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
@@ -93,6 +105,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                 currentlevel = couple.getCurrentLevel();
                 coupleId = couple.getId();
                 level = couple.getLevels().get(currentlevel-1);
+                hintText.setText(level.getLevelHint());
                 String root = Environment.getExternalStorageDirectory().toString();
                 File myDir = new File(root);
                 myDir.mkdirs();
@@ -126,6 +139,24 @@ public class LogoActivity extends AppCompatActivity implements Constants {
 
             }
         });
+
+        hint.setOnButtonClickListener(new TapHoldUpButton.OnButtonClickListener() {
+            @Override
+            public void onLongHoldStart(View v) {
+
+            }
+
+            @Override
+            public void onLongHoldEnd(View v) {
+
+            }
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     static {

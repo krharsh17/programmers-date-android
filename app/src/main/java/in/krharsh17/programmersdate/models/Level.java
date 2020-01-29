@@ -11,6 +11,16 @@ public class Level {
     private String poseValue;
     private String logoValue;
     private String audioValue;
+    private String levelHint;
+
+    public String getLevelHint() {
+        return levelHint;
+    }
+
+    public void setLevelHint(String levelHint) {
+        this.levelHint = levelHint;
+    }
+
     private boolean skipped;
 
     public boolean isSkipped() {
