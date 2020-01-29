@@ -53,15 +53,13 @@ public interface Constants {
     String mainBuildingText = "Main Building";
     String civilDeptText = "Civil Department";
     String computerCentreText = "Computer Centre";
-    String tennisCourtText = "Tennis Court";
+    String tennisCourtText = "Basketball Court";
     String directorBungalowText = "Director's Bungalow";
     String guestHouseText = "Guest House";
     String mechanicalWorkshopText = "Mechanical Workshop";
     String gangaHostelText = "Ganga Hostel";
     String cseDeptText = "CSE Department";
-    String kosiHostelText = "Kosi Hostel";
     String CWRSText = "CWRS";
-    String libraryText = "Library";
     String canteenGopalJiText = "Canteen Gopal Ji";
     String canteenShuklaJiText = "Canteen Shukla Ji";
     String electricalDeptText = "Electrical Department";
@@ -70,8 +68,6 @@ public interface Constants {
     String electronicsDeptText = "Electronics Department";
     String physicsDeptText = "Physics Department";
     String groundText = "Main Ground";
-    String soneAHostelText = "Sone A Hostel";
-    String soneBHostelText = "Sone B Hostel";
     String miniAuditoriumText = "Mini Auditorium";
 
 
@@ -94,7 +90,6 @@ public interface Constants {
     int MODEL_WIDTH = 257;
     int MODEL_HEIGHT = 257;
 
-    String TAG = "DEBUG";
     int numLevels = 10;
     int numLocs = 1;
 

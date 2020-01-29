@@ -99,29 +99,39 @@ public class DetailFragment extends Fragment implements Constants {
                 public void onClick(View v) {
                     switch (taskType) {
                         case taskTypeLogo:
-                            Intent logoIntent = new Intent(getActivity(), LogoActivity.class);
-                            logoIntent.putExtra("currentLevel", currentLevel);
-                            startActivity(logoIntent);
+                            if(((MainActivity)getActivity()).checkDistance()){
+                                Intent logoIntent = new Intent(getActivity(), LogoActivity.class);
+                                logoIntent.putExtra("currentLevel", currentLevel);
+                                startActivity(logoIntent);
+                            }
                             break;
                         case taskTypeBar:
-                            Intent barIntent = new Intent(getActivity(), BarActivity.class);
-                            barIntent.putExtra("currentLevel", currentLevel);
-                            startActivity(barIntent);
+                            if(((MainActivity)getActivity()).checkDistance()){
+                                Intent logoIntent = new Intent(getActivity(), QRActivity.class);
+                                logoIntent.putExtra("currentLevel", currentLevel);
+                                startActivity(logoIntent);
+                            }
                             break;
                         case taskTypePose:
-                            Intent poseIntent = new Intent(getActivity(), PoseActivity.class);
-                            poseIntent.putExtra("currentLevel", currentLevel);
-                            startActivity(poseIntent);
+                            if(((MainActivity)getActivity()).checkDistance()){
+                                Intent logoIntent = new Intent(getActivity(), PoseActivity.class);
+                                logoIntent.putExtra("currentLevel", currentLevel);
+                                startActivity(logoIntent);
+                            }
                             break;
                         case taskTypeQR:
-                            Intent qrIntent = new Intent(getActivity(), QRActivity.class);
-                            qrIntent.putExtra("currentLevel", currentLevel);
-                            startActivity(qrIntent);
+                            if(((MainActivity)getActivity()).checkDistance()){
+                                Intent logoIntent = new Intent(getActivity(), QRActivity.class);
+                                logoIntent.putExtra("currentLevel", currentLevel);
+                                startActivity(logoIntent);
+                            }
                             break;
                         case taskTypeTwister:
-                            Intent twisterIntent = new Intent(getActivity(), AudioActivity.class);
-                            twisterIntent.putExtra("currentLevel", currentLevel);
-                            startActivity(twisterIntent);
+                            if(((MainActivity)getActivity()).checkDistance()){
+                                Intent logoIntent = new Intent(getActivity(), AudioActivity.class);
+                                logoIntent.putExtra("currentLevel", currentLevel);
+                                startActivity(logoIntent);
+                            }
                             break;
                     }
 
