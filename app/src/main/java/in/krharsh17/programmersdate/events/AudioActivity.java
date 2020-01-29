@@ -45,15 +45,18 @@ public class AudioActivity extends AppCompatActivity implements Constants {
         twister = findViewById(R.id.twister);
     }
 
-    void setup() {
+    void setup(){
         CoupleManager coupleManager = new CoupleManager(this);
         coupleManager.getCouple().setOnFetchedListener(new CoupleManager.OnFetchedListener() {
             @Override
             public void onCoupleFetched(Couple couple) {
                 coupleId = couple.getId();
                 currentlevel = couple.getCurrentLevel();
-                Level level = couple.getLevels().get(currentlevel - 1);
+                Level level =  couple.getLevels().get(currentlevel-1);
                 actualTwister = level.getAudioValue();
+                for(int i=0;i<9;i++){
+                    actualTwister = actualTwister + " " + level.getAudioValue();
+                }
                 twister.setText(actualTwister);
                 Log.i(TAG, "onCoupleFetched: " + actualTwister);
                 ViewUtils.showToast(AudioActivity.this, "Tap & hold the button to begin", ViewUtils.DURATION_SHORT);

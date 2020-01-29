@@ -23,6 +23,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -36,6 +37,7 @@ import in.krharsh17.programmersdate.ViewUtils;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
 import in.krharsh17.programmersdate.home.bottompager.DetailFragment;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
+import in.krharsh17.programmersdate.home.managers.LocationManager;
 import in.krharsh17.programmersdate.models.Couple;
 import in.krharsh17.programmersdate.models.Level;
 
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     String coupleId;
 
+    ArrayList<LatLng> levelLatLng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     void init() {
         appRunning = true;
         map = new Map();
+        levelLatLng = new ArrayList<>();
         bottomPager = findViewById(R.id.bottom_pager);
         levelRecycler = findViewById(R.id.levels_recycler);
         time = findViewById(R.id.time_remaining);
@@ -201,55 +206,84 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     case sacBuildingText:
                         map.addLandmark(sacBuilding, R.drawable.marker_sac);
                         gameLocations.add(sacBuilding);
+                        levelLatLng.add(sacBuilding);
                         break;
                     case cafeteriaText:
                         map.addLandmark(cafeteria, R.drawable.marker_nescafe);
                         gameLocations.add(cafeteria);
+                        levelLatLng.add(cafeteria);
                         break;
                     case mainBuildingText:
                         map.addLandmark(mainBuilding, R.drawable.marker_main_building);
                         gameLocations.add(mainBuilding);
+                        levelLatLng.add(mainBuilding);
                         break;
                     case civilDeptText:
                         map.addLandmark(civilDept, R.drawable.marker_main_building);
                         gameLocations.add(civilDept);
+                        levelLatLng.add(civilDept);
                         break;
                     case computerCentreText:
 //                    map.addLandmark(computerCentre, R.drawable.marker);
 //                    gameLocations.add(computerCentre);
+                        levelLatLng.add(computerCentre);
                         break;
                     case tennisCourtText:
                         map.addLandmark(tennisCourt, R.drawable.marker_tennis);
                         gameLocations.add(tennisCourt);
+                        levelLatLng.add(tennisCourt);
                         break;
                     case directorBungalowText:
 //                    map.addLandmark(directorBungalow, R.drawable.marker);
 //                    gameLocations.add(directorBungalow);
+                        levelLatLng.add(directorBungalow);
                         break;
                     case guestHouseText:
 //                    map.addLandmark(guestHouse, R.drawable.marker);
 //                    gameLocations.add(guestHouse);
+                        levelLatLng.add(guestHouse);
                         break;
                     case mechanicalWorkshopText:
 //                    map.addLandmark(mechanicalWorkshop, R.drawable.marker);
 //                    gameLocations.add(mechanicalWorkshop);
+                        levelLatLng.add(mechanicalWorkshop);
                         break;
                     case gangaHostelText:
+                        levelLatLng.add(gangaHostel);
+                        break;
                     case cseDeptText:
-                    case kosiHostelText:
+                        levelLatLng.add(cseDept);
+                        break;
                     case CWRSText:
-                    case libraryText:
+                        levelLatLng.add(CWRS);
+                        break;
                     case canteenGopalJiText:
+                        levelLatLng.add(canteenGopalJi);
+                        break;
                     case canteenShuklaJiText:
+                        levelLatLng.add(canteenShuklaJi);
+                        break;
                     case electricalDeptText:
+                        levelLatLng.add(electricalDept);
+                        break;
                     case mechanicalDeptText:
+                        levelLatLng.add(mechanicalDept);
+                        break;
                     case newElectricalDeptText:
+                        levelLatLng.add(newElectricalDept);
+                        break;
                     case electronicsDeptText:
+                        levelLatLng.add(electronicsDept);
+                        break;
                     case physicsDeptText:
+                        levelLatLng.add(physicsDept);
+                        break;
                     case groundText:
-                    case soneAHostelText:
-                    case soneBHostelText:
+                        levelLatLng.add(ground);
+                        break;
                     case miniAuditoriumText:
+                        levelLatLng.add(miniAuditorium);
+                        break;
                 }
             }
     }
@@ -467,4 +501,10 @@ public class MainActivity extends AppCompatActivity implements Constants {
         });
 
     }
+
+    public boolean checkDistance(){
+
+        return LocationManager.distance(levelLatLng,map.getMyLocation().getLatitude(),map.getMyLocation().getLongitude());
+    }
+
 }
