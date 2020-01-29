@@ -122,7 +122,7 @@ public class AudioActivity extends AppCompatActivity implements Constants {
 
     public void levelSuccess() {
         couplesRef.child(coupleId).child("currentLevel").setValue(currentlevel + 1);
-        ViewUtils.showToast(getApplicationContext(), "Level completed successfully", ViewUtils.DURATION_LONG);
+        ViewUtils.showToast(this, "Level completed successfully", ViewUtils.DURATION_LONG);
         onBackPressed();
     }
 }

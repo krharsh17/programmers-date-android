@@ -2,10 +2,11 @@ package in.krharsh17.programmersdate.home;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,8 +33,8 @@ import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.events.AudioActivity;
 import in.krharsh17.programmersdate.home.bottompager.BottomPagerAdapter;
+import in.krharsh17.programmersdate.home.bottompager.DetailFragment;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
 import in.krharsh17.programmersdate.models.Couple;
 import in.krharsh17.programmersdate.models.Level;
@@ -44,10 +45,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
     LinearLayoutManager linearLayoutManagerThree;
     RecyclerView.SmoothScroller smoothScroller;
     Couple currentCouple;
+    long timeRemaining;
 
+    CountDownTimer countDownTimer;
     int currentLevel;
 
     boolean appRunning = false;
+
+    long timeLimit;
 
     Map map;
     ViewPager bottomPager;
@@ -68,14 +73,6 @@ public class MainActivity extends AppCompatActivity implements Constants {
         setContentView(R.layout.activity_main);
         init();
         run();
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(MainActivity.this, AudioActivity.class));
-            }
-        }, 2000);
-
     }
 
     void init() {
@@ -110,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         hideOverlays();
         ViewUtils.showProgressDialog(this, "Please wait");
 
+
         if (!coupleId.equals("NOT_FOUND")) {
             new CoupleManager(this)
                     .getCouple().setOnFetchedListener(new CoupleManager.OnFetchedListener() {
@@ -120,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     checkCurrentPosition();
                     attachCoupleListener();
                     ViewUtils.removeDialog();
+                    startTimer();
                 }
 
                 @Override
@@ -137,6 +136,23 @@ public class MainActivity extends AppCompatActivity implements Constants {
         levelRecycler.setLayoutManager(linearLayoutManagerThree);
         levelRecycler.setHasFixedSize(true);
         levelRecycler.setLayoutFrozen(true);
+    }
+
+    void startTimer() {
+        if (timeRemaining == 0)
+            timeRemaining = Constants.timeLimit;
+        countDownTimer = new CountDownTimer(timeRemaining, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+//                ViewUtils.showCompleteDialog(MainActivity.this);
+            }
+        };
+        countDownTimer.start();
     }
 
     void attachCoupleListener() {
@@ -158,6 +174,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     public void setCurrentCouple(Couple currentCouple) {
         this.currentCouple = currentCouple;
+        refreshClock(currentCouple.getTimeLimit());
+        timeLimit = currentCouple.getTimeLimit();
         setLevelRecycler();
         setupBottomPager();
         bottomPager.setCurrentItem(currentCouple.getCurrentLevel() - 1, true);
@@ -239,12 +257,12 @@ public class MainActivity extends AppCompatActivity implements Constants {
     void setLevelRecycler() {
         if (currentCouple == null)
             return;
-        if (currentCouple.getLevels() != null) {
-            if (levelRecycler.getAdapter() == null)
+//        if (currentCouple.getLevels() != null) {
+//            if (levelRecycler.getAdapter() == null)
                 levelRecycler.setAdapter(new LevelsAdapter(MainActivity.this, currentCouple.getLevels(), currentCouple.getCurrentLevel()));
-            else
-                ((LevelsAdapter) levelRecycler.getAdapter()).levelSetter(currentCouple.getCurrentLevel());
-        }
+//            else
+//                ((LevelsAdapter) levelRecycler.getAdapter()).levelSetter(currentCouple.getCurrentLevel());
+//        }
         smoothScroller.setTargetPosition(currentCouple.getCurrentLevel() - 1);
         linearLayoutManagerThree.startSmoothScroll(smoothScroller);
     }
@@ -253,7 +271,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
     void setupBottomPager() {
 
 
-        bottomPager.setAdapter(new BottomPagerAdapter(getSupportFragmentManager()));
+        BottomPagerAdapter bottomPagerAdapter = new BottomPagerAdapter(getSupportFragmentManager());
+        ArrayList<DetailFragment> frags = new ArrayList<>();
+        for (int i = 1; i <= numLevels; i++) {
+            frags.add(new DetailFragment().setTaskType(currentCouple.getLevels().get(i - 1).getTaskType(), i));
+        }
+        bottomPagerAdapter.setFragments(frags);
+        Log.i(TAG, "setupBottomPager: " + frags.size());
+        bottomPager.setAdapter(bottomPagerAdapter);
 
 
         bottomPager.setPadding(
@@ -272,8 +297,17 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     }
 
-    void setupClock() {
-
+    void refreshClock(long timeLimit) {
+        long timeRemaining = startTime + timeLimit / 1000 - System.currentTimeMillis() / 1000;
+        Log.i(TAG, "refreshClock: " + timeRemaining);
+        this.timeRemaining = timeRemaining;
+        if (timeRemaining <= 0) {
+            if (countDownTimer != null) {
+                countDownTimer.cancel();
+                countDownTimer.onFinish();
+            }
+        }
+        time.setText(timeRemaining / 60 / 60 + ":" + timeRemaining / 60 % 60 + " HOURS REMAINING");
     }
 
     @Override

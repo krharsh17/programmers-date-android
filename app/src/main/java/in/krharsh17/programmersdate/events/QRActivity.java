@@ -1,6 +1,5 @@
 package in.krharsh17.programmersdate.events;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,7 +22,6 @@ import java.util.List;
 
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.ViewUtils;
-import in.krharsh17.programmersdate.home.MainActivity;
 import in.krharsh17.programmersdate.home.managers.CoupleManager;
 import in.krharsh17.programmersdate.models.Couple;
 import in.krharsh17.programmersdate.models.Level;
@@ -47,7 +45,6 @@ public class QRActivity extends AppCompatActivity {
             if(lastText.equals(codeValueActual)){
                 levelSuccess();
             }
-            //handle result here
 
             beepManager.setVibrateEnabled(true);
             beepManager.setBeepEnabled(true);
@@ -115,10 +112,4 @@ public class QRActivity extends AppCompatActivity {
         onBackPressed();
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(QRActivity.this, MainActivity.class);
-        startActivity(intent);
-        QRActivity.this.finish();
-    }
 }

@@ -81,7 +81,7 @@ public interface Constants {
 
     String helpTextPose = "Strike the given pose together with your partner and get it captured to ace this round!";
     String helpTextQR = "Find a hidden QR code in the marked areas!";
-    String helpTextBar = "Find a hidden bar code in the show areas!";
+    String helpTextBar = "Find a hidden bar code in the shown areas!";
     String helpTextLogo = "Find a popular logo in the set areas!";
     String helpTextTwister = "Say the given tongue twister clearly";
 
@@ -94,12 +94,13 @@ public interface Constants {
     int MODEL_WIDTH = 257;
     int MODEL_HEIGHT = 257;
 
-    String TAG = "DEBUG";
-    int numLevels = 10;
+    int numLevels = 30;
     int numLocs = 1;
 
     long timeLimit = 1000 * 60 * 60 * 3;
 
     int REQUEST_CAMERA_PERMISSION = 1;
+
+    long startTime = 1580304964;
 
 }

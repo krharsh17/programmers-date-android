@@ -12,6 +12,9 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.aar.tapholdupbutton.TapHoldUpButton;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 
 import org.opencv.core.DMatch;
@@ -44,6 +47,24 @@ public class LogoActivity extends AppCompatActivity implements Constants {
     Level level;
     boolean isSuccess = false, safeToCapture = false;
     Handler handler;
+    private TapHoldUpButton hint;
+
+    public static Camera getCameraInstance() {
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        } catch (Exception e) {
+            Log.i("cameraloading", "not opened");
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
+    }
+
+    @Override
+    public void onBackPressed() {
+        handler.removeCallbacksAndMessages(null);
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +73,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         mCamera = getCameraInstance();
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
+        hint = findViewById(R.id.hint_button);
         FrameLayout preview = findViewById(R.id.camera_preview);
         preview.addView(mPreview);
         mCamera.startPreview();
@@ -77,7 +99,13 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                 String logofile = "Image-match.jpg";
                 File lfile = new File(myDir, logofile);
                 String imagename = level.getLogoValue();
-                FirebaseStorage.getInstance().getReference().child("logos").child(imagename).getFile(lfile);
+                FirebaseStorage.getInstance().getReference().child("logos").child(imagename).getFile(lfile)
+                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+
+                            }
+                        });
                 ViewUtils.showToast(LogoActivity.this, "Scanning..", ViewUtils.DURATION_SHORT);
                 handler = new Handler();
                 ViewUtils.removeDialog();
@@ -98,46 +126,6 @@ public class LogoActivity extends AppCompatActivity implements Constants {
 
             }
         });
-
-
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        handler.removeCallbacksAndMessages(null);
-        super.onBackPressed();
-    }
-
-    public static Camera getCameraInstance(){
-        Camera c = null;
-        try {
-            c = Camera.open(); // attempt to get a Camera instance
-        }
-        catch (Exception e){
-            Log.i("cameraloading","not opened");
-            // Camera is not available (in use or does not exist)
-        }
-        return c; // returns null if camera is unavailable
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        releaseCamera();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        mCamera = getCameraInstance();
-    }
-
-    private void releaseCamera(){
-        if (mCamera != null){
-            mCamera.release();
-            mCamera = null;
-        }
     }
 
     static {
@@ -261,7 +249,6 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         couplesRef.child(coupleId).child("currentLevel").setValue(currentlevel+1);
         ViewUtils.showToast(this,"Level completed successfully",ViewUtils.DURATION_LONG);
         onBackPressed();
-        LogoActivity.this.finish();
     }
 
 }

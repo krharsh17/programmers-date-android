@@ -16,7 +16,6 @@ import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.ViewUtils;
 import in.krharsh17.programmersdate.events.AudioActivity;
-import in.krharsh17.programmersdate.events.BarActivity;
 import in.krharsh17.programmersdate.events.LogoActivity;
 import in.krharsh17.programmersdate.events.PoseActivity;
 import in.krharsh17.programmersdate.events.QRActivity;
@@ -104,7 +103,7 @@ public class DetailFragment extends Fragment implements Constants {
                             startActivity(logoIntent);
                             break;
                         case taskTypeBar:
-                            Intent barIntent = new Intent(getActivity(), BarActivity.class);
+                            Intent barIntent = new Intent(getActivity(), QRActivity.class);
                             barIntent.putExtra("currentLevel", currentLevel);
                             startActivity(barIntent);
                             break;

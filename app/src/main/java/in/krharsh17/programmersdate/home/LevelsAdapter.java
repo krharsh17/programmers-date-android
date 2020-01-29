@@ -1,8 +1,6 @@
 package in.krharsh17.programmersdate.home;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +22,11 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
     private ArrayList<ViewHolder> viewHolders = new ArrayList<>();
     private int currentLevel;
 
-    public LevelsAdapter(Context context){
+    public LevelsAdapter(Context context) {
         this.context = context;
     }
 
-    public LevelsAdapter (Context context, ArrayList<Level> levels, int currentLevel){
+    public LevelsAdapter(Context context, ArrayList<Level> levels, int currentLevel) {
         this.context = context;
         this.levels = levels;
         this.currentLevel = currentLevel;
@@ -45,20 +43,20 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
 
         final Level level = levels.get(position);
         viewHolders.add(holder);
-        if(level.getLevelNumber()<currentLevel){
-            if (level.isSkipped()==true){
-                setSkipped(holder,level);
-            }else {
+        if (level.getLevelNumber() < currentLevel) {
+            if (level.isSkipped() == true) {
+                setSkipped(holder, level);
+            } else {
                 setCompleted(holder, level);
             }
 
-        }else if (level.getLevelNumber()==currentLevel){
+        } else if (level.getLevelNumber() == currentLevel) {
 
-            setUnlocked(holder,level);
+            setUnlocked(holder, level);
 
-        }else if (level.getLevelNumber()>currentLevel){
+        } else if (level.getLevelNumber() > currentLevel) {
 
-            setLocked(holder,level);
+            setLocked(holder, level);
 
         }
 
@@ -69,7 +67,104 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
         return levels.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    public void setLocked(ViewHolder viewHolder, Level level) {
+        viewHolder.levelText.setText("L E V E L  " + level.getLevelNumber());
+        viewHolder.levelIcon.setImageResource(R.drawable.level_locked_icon);
+        viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+    }
+
+    public void setSkipped(ViewHolder viewHolder, Level level) {
+        viewHolder.levelText.setText("L E V E L  " + level.getLevelNumber());
+        viewHolder.levelIcon.setImageResource(R.drawable.cross);
+        viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+    }
+
+    public void setUnlocked(ViewHolder viewHolder, Level level) {
+        viewHolder.levelText.setText("L E V E L  " + level.getLevelNumber());
+        if (level.getTaskType().equals("POSE")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_pose_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        } else if (level.getTaskType().equals("BAR")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_bar_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        } else if (level.getTaskType().equals("QR")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_qr_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        } else if (level.getTaskType().equals("LOGO")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_logo_bright);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        } else if (level.getTaskType().equals("AUDIO")) {
+//            viewHolder.levelIcon.setImageResource(R.drawable.level_audio);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
+        }
+    }
+
+    public void setCompleted(ViewHolder viewHolder, Level level) {
+        viewHolder.levelText.setText("L E V E L  " + level.getLevelNumber());
+        if (level.getTaskType().equals("POSE")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_pose_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        } else if (level.getTaskType().equals("BAR")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_bar_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        } else if (level.getTaskType().equals("QR")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_qr_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        } else if (level.getTaskType().equals("LOGO")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_logo_dull);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        } else if (level.getTaskType().equals("AUDIO")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.cross);
+            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
+        }
+    }
+
+    public void levelSetter(int newLevel) {
+        currentLevel = newLevel;
+
+        for (int i = 0; i < viewHolders.size(); i++) {
+            Level level = levels.get(i);
+            if (level.getLevelNumber() < newLevel) {
+                if (level.isSkipped()) {
+                    setSkipped(viewHolders.get(i), level);
+                } else {
+                    setCompleted(viewHolders.get(i), level);
+                }
+
+            } else if (level.getLevelNumber() == newLevel) {
+
+                setUnlocked(viewHolders.get(i), level);
+
+            } else if (level.getLevelNumber() > newLevel) {
+
+                setLocked(viewHolders.get(i), level);
+
+            }
+        }
+//
+//        if (newLevel>currentLevel){
+//            for(int i=currentLevel;i<=newLevel;i++){
+//                if(i==newLevel){
+//                    setUnlocked(viewHolders.get(newLevel-1),levels.get(newLevel-1));
+//                }else {
+//                    setCompleted(viewHolders.get(i-1),levels.get(i-1));
+//                }
+//            }
+//        }else if (newLevel<currentLevel){
+//            for (int i=currentLevel;i>=newLevel;i--){
+//                if(i==newLevel){
+//                    setUnlocked(viewHolders.get(newLevel-1),levels.get(newLevel-1));
+//                }else {
+//                    setLocked(viewHolders.get(i-1),levels.get(i-1));
+//                }
+//            }
+//        }else {
+//            setUnlocked(viewHolders.get(newLevel-1),levels.get(newLevel-1));
+//        }
+
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView levelText;
         public ImageView levelIcon;
@@ -80,76 +175,6 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
             levelText = itemView.findViewById(R.id.level_number_text);
             levelIcon = itemView.findViewById(R.id.level_icon_image);
         }
-    }
-
-    public void setLocked(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
-        viewHolder.levelIcon.setImageResource(R.drawable.level_locked_icon);
-        viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-    }
-
-    public void setSkipped(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
-        viewHolder.levelIcon.setImageResource(R.drawable.app_logo);
-        viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-    }
-
-    public void setUnlocked(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
-        if(level.getTaskType().equals("POSE")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_pose_bright);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
-        }else if (level.getTaskType().equals("BAR")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_bar_bright);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
-        }else if (level.getTaskType().equals("QR")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_qr_bright);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
-        }else if (level.getTaskType().equals("LOGO")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_logo_bright);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
-        }
-    }
-
-    public void setCompleted(ViewHolder viewHolder, Level level){
-        viewHolder.levelText.setText("L E V E L  "+level.getLevelNumber());
-        if(level.getTaskType().equals("POSE")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_pose_dull);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-        }else if (level.getTaskType().equals("BAR")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_bar_dull);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-        }else if (level.getTaskType().equals("QR")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_qr_dull);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-        }else if (level.getTaskType().equals("LOGO")){
-            viewHolder.levelIcon.setImageResource(R.drawable.level_logo_dull);
-            viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-        }
-    }
-
-    public void levelSetter(int newLevel){
-
-        if (newLevel>currentLevel){
-            for(int i=currentLevel;i<=newLevel;i++){
-                if(i==newLevel){
-                    setUnlocked(viewHolders.get(newLevel-1),levels.get(newLevel-1));
-                }else {
-                    setCompleted(viewHolders.get(i-1),levels.get(i-1));
-                }
-            }
-        }else if (newLevel<currentLevel){
-            for (int i=currentLevel;i>=newLevel;i--){
-                if(i==newLevel){
-                    setUnlocked(viewHolders.get(newLevel-1),levels.get(newLevel-1));
-                }else {
-                    setLocked(viewHolders.get(i-1),levels.get(i-1));
-                }
-            }
-        }else {
-            setUnlocked(viewHolders.get(newLevel-1),levels.get(newLevel-1));
-        }
-
     }
 
 }

@@ -9,9 +9,7 @@
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
     <ImageView
         android:layout_width="200dp"
@@ -22,5 +20,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
+
+    <com.aar.tapholdupbutton.TapHoldUpButton
+        android:id="@+id/hint_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        app:thub_circleColor="@color/colorAccent"
+        app:thub_circleColorOhHold="@color/colorPrimaryDark"
+        app:thub_circleGap="3dp"
+        app:thub_ringColor="@color/colorAccent"
+        app:thub_ringStrokeWidth="3dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

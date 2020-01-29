@@ -54,6 +54,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.maps:google-maps-services:0.1.20'
     implementation 'com.github.abdularis:TapHoldUpButton:0.1.2'
+    implementation 'com.github.shalskar:PeekAndPop:1.1.0'
     implementation 'com.google.android.material:material:1.0.0-beta01'
     implementation 'com.journeyapps:zxing-android-embedded:3.3.0'
     implementation 'com.android.volley:volley:1.1.1'
