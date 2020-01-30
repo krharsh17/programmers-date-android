@@ -13,8 +13,8 @@ public interface Constants {
     int upperMatchPoints = 10;
     int lowerMatchPoints = 5;
     int poseTotalChecks = 480;
-    int poseUpperMatchCriteria = 250;
-    int poseLowerMatchCriteria = 150;
+    int poseUpperMatchCriteria = 350;
+    int poseLowerMatchCriteria = 250;
     String TAG = "DEFAULT";
 
     DatabaseReference couplesRef = FirebaseDatabase.getInstance().getReference().child("couples");
@@ -91,6 +91,6 @@ public interface Constants {
 
     int REQUEST_CAMERA_PERMISSION = 1;
 
-    long startTime = 1580380200;
+    long startTime = 1580381400;
 
 }

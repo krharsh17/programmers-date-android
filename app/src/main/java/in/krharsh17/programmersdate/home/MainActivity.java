@@ -2,6 +2,7 @@ package in.krharsh17.programmersdate.home;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     boolean appRunning = false;
 
     long timeLimit;
-
+    Dialog dialog;
     Map map;
     ViewPager bottomPager;
     private boolean areOverlaysShown = true;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     ArrayList<LatLng> levelLatLng;
 
     Thread timer;
+    private boolean blocked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +108,11 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     }
                 };
         coupleId = new SharedPrefManager(this).getCoupleId();
+
+        dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog_complete);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
     }
 
 
@@ -130,17 +137,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
                     attachCoupleListener();
                     ViewUtils.removeDialog();
                     startTimer();
-
-                    if (!currentCouple.isEnabled()) {
-                        if (ViewUtils.completeShowing) {
-                            ViewUtils.removeDialog();
-                            ViewUtils.completeShowing = false;
-                        }
-                    } else {
-                        ViewUtils.showCompleteDialog(MainActivity.this);
-                    }
-
-
+//                    if (!currentCouple.isEnabled()) {
+//                        dialog.show();
+//                        blocked = true;
+//                    } else {
+//                        if(blocked){
+//                            dialog.cancel();
+//                            blocked = false;
+//                        }
+//                    }
                     FirebaseDatabase.getInstance().getReference().child("settings").child("gameRunning").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -148,12 +153,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
                             if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                                 boolean gameRunning = dataSnapshot.getValue(Boolean.class);
                                 if (gameRunning) {
+
                                     if (ViewUtils.completeShowing) {
                                         ViewUtils.removeDialog();
                                         ViewUtils.completeShowing = false;
                                     }
                                 } else {
-                                    ViewUtils.showCompleteDialog(MainActivity.this);
+
+                                    if (!ViewUtils.completeShowing)
+                                        ViewUtils.showCompleteDialog(MainActivity.this);
                                 }
                             }
                         }
@@ -175,8 +183,6 @@ public class MainActivity extends AppCompatActivity implements Constants {
             new CoupleManager(MainActivity.this).syncWithServer(this);
             ViewUtils.showToast(MainActivity.this, "Some error occured!", ViewUtils.DURATION_SHORT);
         }
-
-
         levelRecycler.setLayoutManager(linearLayoutManagerThree);
         levelRecycler.setHasFixedSize(true);
         levelRecycler.setLayoutFrozen(true);
@@ -212,7 +218,6 @@ public class MainActivity extends AppCompatActivity implements Constants {
                         if (dataSnapshot != null && dataSnapshot.getValue() != null)
                             setCurrentCouple(dataSnapshot.getValue(Couple.class));
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -258,14 +263,15 @@ public class MainActivity extends AppCompatActivity implements Constants {
         bottomPager.setCurrentItem(currentCouple.getCurrentLevel() - 1, true);
         refreshMap();
 
-        if (!currentCouple.isEnabled()) {
-            ViewUtils.showCompleteDialog(MainActivity.this);
-        } else {
-            if (ViewUtils.completeShowing) {
-                ViewUtils.removeDialog();
-                ViewUtils.completeShowing = false;
-            }
-        }
+//        if (!currentCouple.isEnabled() && !blocked) {
+//            dialog.show();
+//            blocked = true;
+//        } else {
+//            if (blocked) {
+//                dialog.cancel();
+//                blocked = false;
+//            }
+//        }
 
         currentLevel = currentCouple.getCurrentLevel();
         new Handler().postDelayed(new Runnable() {
@@ -422,6 +428,18 @@ public class MainActivity extends AppCompatActivity implements Constants {
         map.disableGPS();
         appRunning = false;
         Log.i(TAG, "onPause: ");
+        new CoupleManager(MainActivity.this).getCouple().setOnFetchedListener(new CoupleManager.OnFetchedListener() {
+            @Override
+            public void onCoupleFetched(Couple couple) {
+                couple.setEnabled(false);
+                couplesRef.child(couple.getId()).setValue(couple);
+            }
+
+            @Override
+            public void onErrorOccured(String message) {
+
+            }
+        });
     }
 
     @Override
