@@ -39,11 +39,15 @@ public class QRActivity extends AppCompatActivity {
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
+            if (lastText != null && lastText.equals(result.getText()))
+                return;
             lastText = result.getText();
 
             Log.i("resulthere",lastText);
             if(lastText.equals(codeValueActual)){
                 levelSuccess();
+            } else {
+                ViewUtils.showToast(QRActivity.this, "Try another code", ViewUtils.DURATION_LONG);
             }
 
             beepManager.setVibrateEnabled(true);

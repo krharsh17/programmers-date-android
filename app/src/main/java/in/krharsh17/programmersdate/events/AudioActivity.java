@@ -54,7 +54,7 @@ public class AudioActivity extends AppCompatActivity implements Constants {
                 currentlevel = couple.getCurrentLevel();
                 Level level =  couple.getLevels().get(currentlevel-1);
                 actualTwister = level.getAudioValue();
-                for(int i=0;i<9;i++){
+                for (int i = 0; i < 4; i++) {
                     actualTwister = actualTwister + " " + level.getAudioValue();
                 }
                 twister.setText(actualTwister);

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -110,8 +109,7 @@ public class LocationManager {
         ArrayList<Double> userLocation = new ArrayList<>();
         userLocation.add(latLng.latitude);
         userLocation.add(latLng.longitude);
-        String s = new SharedPrefManager(context).getCoupleId();
-        FirebaseDatabase.getInstance().getReference().child("Couples").child(s).setValue(userLocation);
+        writeUserLocation(userLocation);
     }
 
     public void writeUserLocation(ArrayList<Double> userLocation) {
@@ -127,8 +125,7 @@ public class LocationManager {
         ArrayList<Double> userLocation = new ArrayList<>();
         userLocation.add(lat);
         userLocation.add(longi);
-        String s = new SharedPrefManager(context).getCoupleId();
-        FirebaseDatabase.getInstance().getReference().child("Couples").child(s).setValue(userLocation);
+        writeUserLocation(userLocation);
     }
 
     public interface OnLocationChangedListener {

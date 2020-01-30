@@ -93,8 +93,8 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
         } else if (level.getTaskType().equals("LOGO")) {
             viewHolder.levelIcon.setImageResource(R.drawable.level_logo_bright);
             viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
-        } else if (level.getTaskType().equals("AUDIO")) {
-//            viewHolder.levelIcon.setImageResource(R.drawable.level_audio);
+        } else if (level.getTaskType().equals("TWISTER")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_audio_bright);
             viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_bright);
         }
     }
@@ -113,8 +113,8 @@ public class LevelsAdapter extends RecyclerView.Adapter<LevelsAdapter.ViewHolder
         } else if (level.getTaskType().equals("LOGO")) {
             viewHolder.levelIcon.setImageResource(R.drawable.level_logo_dull);
             viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
-        } else if (level.getTaskType().equals("AUDIO")) {
-            viewHolder.levelIcon.setImageResource(R.drawable.cross);
+        } else if (level.getTaskType().equals("TWISTER")) {
+            viewHolder.levelIcon.setImageResource(R.drawable.level_audio_dull);
             viewHolder.levelIcon.setBackgroundResource(R.drawable.level_background_dull);
         }
     }

@@ -49,26 +49,20 @@ public interface Constants {
     LatLng miniAuditorium = new LatLng(25.6198062, 85.1737271);
 
     String sacBuildingText = "SAC";
-    String cafeteriaText = "Cafeteria";
     String mainBuildingText = "Main Building";
     String civilDeptText = "Civil Department";
     String computerCentreText = "Computer Centre";
     String tennisCourtText = "Basketball Court";
     String directorBungalowText = "Director's Bungalow";
     String guestHouseText = "Guest House";
-    String mechanicalWorkshopText = "Mechanical Workshop";
     String gangaHostelText = "Ganga Hostel";
     String cseDeptText = "CSE Department";
     String CWRSText = "CWRS";
     String canteenGopalJiText = "Canteen Gopal Ji";
     String canteenShuklaJiText = "Canteen Shukla Ji";
     String electricalDeptText = "Electrical Department";
-    String mechanicalDeptText = "Mechanical Department";
-    String newElectricalDeptText = "New Electrical Department";
     String electronicsDeptText = "Electronics Department";
-    String physicsDeptText = "Physics Department";
-    String groundText = "Main Ground";
-    String miniAuditoriumText = "Mini Auditorium";
+    String groundText = "Ground";
 
 
     LatLngBounds NITP_BOUNDS = new LatLngBounds(new LatLng(25.619097, 85.170036),
@@ -97,6 +91,6 @@ public interface Constants {
 
     int REQUEST_CAMERA_PERMISSION = 1;
 
-    long startTime = 1580304964;
+    long startTime = 1580380200;
 
 }

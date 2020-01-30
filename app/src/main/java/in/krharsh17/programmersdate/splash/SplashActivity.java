@@ -9,16 +9,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import in.krharsh17.programmersdate.R;
 import in.krharsh17.programmersdate.SharedPrefManager;
 import in.krharsh17.programmersdate.ViewUtils;
 import in.krharsh17.programmersdate.home.MainActivity;
+import in.krharsh17.programmersdate.home.managers.CoupleManager;
 
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,24 +75,47 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void proceedToHome() {
-        ActivityOptions options =
-                ActivityOptions.makeSceneTransitionAnimation(this);
-        startActivity(new Intent(this, MainActivity.class),options.toBundle());
-        new Handler().postDelayed(new Runnable() {
+        FirebaseDatabase.getInstance().getReference().child("settings").child("gameRunning").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void run() {
-                SplashActivity.this.finish();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+                    boolean gameRunning = dataSnapshot.getValue(Boolean.class);
+                    if (gameRunning) {
+                        ActivityOptions options =
+                                ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this);
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class), options.toBundle());
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                SplashActivity.this.finish();
+                            }
+                        }, 2000);
+                    } else {
+                        ViewUtils.showToast(SplashActivity.this, "The game is not active currently!\nYour couple id " + new SharedPrefManager(SplashActivity.this).getCoupleId(), ViewUtils.DURATION_LONG);
+                    }
+                }
             }
-        }, 2000);
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == next.getId()) {
             if (roll.getText().length() == 7) {
+                ViewUtils.showProgressDialog(SplashActivity.this, "Preparing game..");
                 SharedPrefManager.setLoggedIn(SplashActivity.this, true);
                 new SharedPrefManager(SplashActivity.this).setRollNumber(Long.parseLong(roll.getText().toString()));
-                proceedToHome();
+                new CoupleManager(SplashActivity.this).syncWithServer(SplashActivity.this).setOnSyncedListener(new CoupleManager.OnSyncedListener() {
+                    @Override
+                    public void onComplete(boolean success) {
+                        proceedToHome();
+                    }
+                });
             } else {
                 ViewUtils.showToast(SplashActivity.this, "Roll number invalid!", ViewUtils.DURATION_SHORT);
             }

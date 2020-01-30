@@ -58,7 +58,7 @@ public class DetailFragment extends Fragment implements Constants {
                     info.setText(helpTextQR);
                     break;
                 case taskTypeTwister:
-                    begin.setImageResource(R.drawable.task_logo_icon);
+                    begin.setImageResource(R.drawable.task_audio_icon);
                     info.setText(helpTextTwister);
                     break;
             }
@@ -96,44 +96,36 @@ public class DetailFragment extends Fragment implements Constants {
             begin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (taskType) {
-                        case taskTypeLogo:
-                            if(((MainActivity)getActivity()).checkDistance()){
+                    if (((MainActivity) getActivity()).checkDistance()) {
+
+                        switch (taskType) {
+                            case taskTypeLogo:
                                 Intent logoIntent = new Intent(getActivity(), LogoActivity.class);
                                 logoIntent.putExtra("currentLevel", currentLevel);
                                 startActivity(logoIntent);
-                            }
-                            break;
-                        case taskTypeBar:
-                            if(((MainActivity)getActivity()).checkDistance()){
+                                break;
+                            case taskTypeQR:
+                            case taskTypeBar:
                                 Intent barIntent = new Intent(getActivity(), QRActivity.class);
                                 barIntent.putExtra("currentLevel", currentLevel);
                                 startActivity(barIntent);
-                            }
-                            break;
-                        case taskTypePose:
-                            if(((MainActivity)getActivity()).checkDistance()){
+                                break;
+                            case taskTypePose:
                                 Intent poseIntent = new Intent(getActivity(), PoseActivity.class);
                                 poseIntent.putExtra("currentLevel", currentLevel);
                                 startActivity(poseIntent);
-                            }
-                            break;
-                        case taskTypeQR:
-                            if(((MainActivity)getActivity()).checkDistance()){
-                                Intent qrIntent = new Intent(getActivity(), QRActivity.class);
-                                qrIntent.putExtra("currentLevel", currentLevel);
-                                startActivity(qrIntent);
-                            }
-                            break;
-                        case taskTypeTwister:
-                            if(((MainActivity)getActivity()).checkDistance()){
+                                break;
+                            case taskTypeTwister:
                                 Intent twisterIntent = new Intent(getActivity(), AudioActivity.class);
                                 twisterIntent.putExtra("currentLevel", currentLevel);
                                 startActivity(twisterIntent);
-                            }
-                            break;
-                    }
 
+                                break;
+                        }
+
+                    } else {
+                        ViewUtils.showToast(getActivity(), "You are not near the set location!", ViewUtils.DURATION_SHORT);
+                    }
                 }
             });
 

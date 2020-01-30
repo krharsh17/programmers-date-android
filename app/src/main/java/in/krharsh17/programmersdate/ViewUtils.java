@@ -2,7 +2,6 @@ package in.krharsh17.programmersdate;
 
 import android.animation.Animator;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
@@ -22,6 +21,8 @@ import java.util.ArrayList;
 import static in.krharsh17.programmersdate.Constants.TAG;
 
 public class ViewUtils {
+    public static boolean completeShowing = false;
+
     public static int DURATION_LONG = Toast.LENGTH_LONG;
     public static int DURATION_SHORT = Toast.LENGTH_SHORT;
 
@@ -34,21 +35,6 @@ public class ViewUtils {
             LayoutInflater inflater = context.getLayoutInflater();
             View layout = inflater.inflate(R.layout.custom_toast,
                     (ViewGroup) context.findViewById(R.id.custom_toast_root));
-
-            ((TextView) layout.findViewById(R.id.custom_toast_textview)).setText(text);
-            // create a new Toast using context
-            Toast toast = new Toast(context);
-            toast.setDuration(duration); // set the duration for the Toast
-            toast.setView(layout); // set the inflated layout
-            toast.show(); // display the custom Toast
-        }
-    }
-
-    public static void showToast(Context context, String text, int duration) {
-        if (context != null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            View layout = inflater.inflate(R.layout.custom_toast,
-                    (ViewGroup) ((Activity) context).findViewById(R.id.custom_toast_root));
 
             ((TextView) layout.findViewById(R.id.custom_toast_textview)).setText(text);
             // create a new Toast using context
@@ -106,6 +92,8 @@ public class ViewUtils {
 
         ViewUtils.cards.add(mainCard);
         ViewUtils.backgrounds.add(background);
+
+        completeShowing = true;
     }
 
     public static void showProgressDialog(Activity activity, String text) {

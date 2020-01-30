@@ -18,6 +18,15 @@ public class Couple {
     private ArrayList<Double> player2Location;
     private ArrayList<Level> levels;
     private long timeLimit = Constants.timeLimit;
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public long getTimeLimit() {
         return timeLimit;

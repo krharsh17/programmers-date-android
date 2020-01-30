@@ -71,6 +71,30 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         super.onBackPressed();
     }
 
+    static MatOfDMatch filterMatchesByDistance(MatOfDMatch matches) {
+        List<DMatch> matches_original = matches.toList();
+        List<DMatch> matches_filtered = new ArrayList<DMatch>();
+
+        int DIST_LIMIT = 30;
+        // Check all the matches distance and if it passes add to list of filtered matches
+        Log.d("DISTFILTER", "ORG SIZE:" + matches_original.size() + "");
+        for (int i = 0; i < matches_original.size(); i++) {
+            DMatch d = matches_original.get(i);
+            if (Math.abs(d.distance) <= DIST_LIMIT) {
+                matches_filtered.add(d);
+            }
+        }
+        Log.d("DISTFILTER", "FIL SIZE:" + matches_filtered.size() + "");
+
+        MatOfDMatch mat = new MatOfDMatch();
+        mat.fromList(matches_filtered);
+        return mat;
+    }
+
+    static {
+        System.loadLibrary("opencv_java3");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +128,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
             public void onCoupleFetched(Couple couple) {
                 currentlevel = couple.getCurrentLevel();
                 coupleId = couple.getId();
-                level = couple.getLevels().get(currentlevel-1);
+                level = couple.getLevels().get(currentlevel - 1);
                 hintText.setText(level.getLevelHint());
                 String root = Environment.getExternalStorageDirectory().toString();
                 File myDir = new File(root);
@@ -119,7 +143,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
 
                             }
                         });
-                ViewUtils.showToast(LogoActivity.this, "Scanning..", ViewUtils.DURATION_SHORT);
+//                ViewUtils.showToast(LogoActivity.this, "Scanning..", ViewUtils.DURATION_SHORT);
                 handler = new Handler();
                 ViewUtils.removeDialog();
 
@@ -143,12 +167,12 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         hint.setOnButtonClickListener(new TapHoldUpButton.OnButtonClickListener() {
             @Override
             public void onLongHoldStart(View v) {
-
+                hint.resetLongHold();
             }
 
             @Override
             public void onLongHoldEnd(View v) {
-
+                hint.resetLongHold();
             }
 
             @Override
@@ -159,31 +183,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
 
     }
 
-    static {
-        System.loadLibrary("opencv_java3");
-    }
-
-    static MatOfDMatch filterMatchesByDistance(MatOfDMatch matches){
-        List<DMatch> matches_original = matches.toList();
-        List<DMatch> matches_filtered = new ArrayList<DMatch>();
-
-        int DIST_LIMIT = 30;
-        // Check all the matches distance and if it passes add to list of filtered matches
-        Log.d("DISTFILTER", "ORG SIZE:" + matches_original.size() + "");
-        for (int i = 0; i < matches_original.size(); i++) {
-            DMatch d = matches_original.get(i);
-            if (Math.abs(d.distance) <= DIST_LIMIT) {
-                matches_filtered.add(d);
-            }
-        }
-        Log.d("DISTFILTER", "FIL SIZE:" + matches_filtered.size() + "");
-
-        MatOfDMatch mat = new MatOfDMatch();
-        mat.fromList(matches_filtered);
-        return mat;
-    }
-
-    public void startMatching(){
+    public void startMatching() {
         Runnable r = new Runnable() {
             public void run() {
                 while (true) {
@@ -207,15 +207,15 @@ public class LogoActivity extends AppCompatActivity implements Constants {
 
     }
 
-    public void captureAndMatch(){
-        mCamera.takePicture(null, null, new Camera.PictureCallback(){
+    public void captureAndMatch() {
+        mCamera.takePicture(null, null, new Camera.PictureCallback() {
 
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
-                Bitmap bmprotated =  Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+                Bitmap bmprotated = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
                 String root = Environment.getExternalStorageDirectory().toString();
                 File myDir = new File(root);
                 myDir.mkdirs();
@@ -238,7 +238,7 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                     DescriptorMatcher matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING);
                     Mat img1 = Imgcodecs.imread(path1);
                     Mat img2 = Imgcodecs.imread(path2);
-                    if(img1!=null&&img2!=null){
+                    if (img1 != null && img2 != null) {
                         Log.i("imageaayikya", "aagyi");
                     }
                     Mat descriptors1 = new Mat();
@@ -250,22 +250,23 @@ public class LogoActivity extends AppCompatActivity implements Constants {
                     detector.detect(img2, keypoints2);
                     extractor.compute(img2, keypoints2, descriptors2);
                     MatOfDMatch matches = new MatOfDMatch();
-                    matcher.match(descriptors1,descriptors2,matches);
+                    matcher.match(descriptors1, descriptors2, matches);
                     MatOfDMatch filtered = filterMatchesByDistance(matches);
                     int total = (int) matches.size().height;
-                    int Match= (int) filtered.size().height;
-                    Log.i("itnaMatchKiya", "total: " + total + " Match: "+Match);
-                    if(total>totalCheckPoints){
-                        if(Match>upperMatchPoints){
+                    int Match = (int) filtered.size().height;
+                    Log.i("itnaMatchKiya", "total: " + total + " Match: " + Match);
+                    if (total > totalCheckPoints) {
+                        if (Match > upperMatchPoints) {
                             if (!isSuccess) {
                                 levelSuccess();
                             }
                         }
-                    }else{
-                        if(Match>lowerMatchPoints){
+                    } else {
+                        if (Match > lowerMatchPoints) {
                             if (!isSuccess) {
                                 levelSuccess();
-                            }                        }
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -275,10 +276,10 @@ public class LogoActivity extends AppCompatActivity implements Constants {
         });
     }
 
-    public void levelSuccess(){
+    public void levelSuccess() {
         isSuccess = true;
-        couplesRef.child(coupleId).child("currentLevel").setValue(currentlevel+1);
-        ViewUtils.showToast(this,"Level completed successfully",ViewUtils.DURATION_LONG);
+        couplesRef.child(coupleId).child("currentLevel").setValue(currentlevel + 1);
+        ViewUtils.showToast(this, "Level completed successfully", ViewUtils.DURATION_LONG);
         onBackPressed();
     }
 

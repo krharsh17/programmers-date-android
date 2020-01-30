@@ -34,13 +34,10 @@ import in.krharsh17.programmersdate.models.Couple;
 import in.krharsh17.programmersdate.models.Level;
 
 import static in.krharsh17.programmersdate.Constants.couplesRef;
-import static in.krharsh17.programmersdate.Constants.lowerMatchPoints;
 import static in.krharsh17.programmersdate.Constants.poseLowerMatchCriteria;
 import static in.krharsh17.programmersdate.Constants.poseTotalChecks;
 import static in.krharsh17.programmersdate.Constants.poseUpperMatchCriteria;
 import static in.krharsh17.programmersdate.Constants.runtime;
-import static in.krharsh17.programmersdate.Constants.totalCheckPoints;
-import static in.krharsh17.programmersdate.Constants.upperMatchPoints;
 import static in.krharsh17.programmersdate.events.LogoActivity.filterMatchesByDistance;
 
 public class PoseActivity extends AppCompatActivity {
@@ -67,6 +64,7 @@ public class PoseActivity extends AppCompatActivity {
             public void onCoupleFetched(Couple couple) {
                 currentlevel = couple.getCurrentLevel();
                 coupleId = couple.getId();
+                Log.i("TAG", "onCoupleFetched: " + currentlevel);
                 level = couple.getLevels().get(currentlevel-1);
                 String root = Environment.getExternalStorageDirectory().toString();
                 File myDir = new File(root);
@@ -89,7 +87,6 @@ public class PoseActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.camera_preview_pose, posenetActivity)
                 .commit();
-
 
         handler = new Handler();
         handler.postDelayed(new Runnable() {

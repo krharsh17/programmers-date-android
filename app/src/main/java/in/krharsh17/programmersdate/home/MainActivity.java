@@ -23,9 +23,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     RecyclerView.SmoothScroller smoothScroller;
     Couple currentCouple;
     long timeRemaining;
+    LocationManager locationManager;
 
     CountDownTimer countDownTimer;
     int currentLevel;
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     ArrayList<LatLng> levelLatLng;
 
+    Thread timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,12 +83,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
     }
 
     void init() {
+
         appRunning = true;
         map = new Map();
         levelLatLng = new ArrayList<>();
         bottomPager = findViewById(R.id.bottom_pager);
         levelRecycler = findViewById(R.id.levels_recycler);
         time = findViewById(R.id.time_remaining);
+        locationManager = new LocationManager(this);
         linearLayoutManagerThree = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         smoothScroller = new
                 LinearSmoothScroller(this) {
@@ -120,10 +125,44 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 public void onCoupleFetched(Couple couple) {
                     currentLevel = couple.getCurrentLevel();
                     setCurrentCouple(couple);
+                    setLevelRecycler();
                     checkCurrentPosition();
                     attachCoupleListener();
                     ViewUtils.removeDialog();
                     startTimer();
+
+                    if (!currentCouple.isEnabled()) {
+                        if (ViewUtils.completeShowing) {
+                            ViewUtils.removeDialog();
+                            ViewUtils.completeShowing = false;
+                        }
+                    } else {
+                        ViewUtils.showCompleteDialog(MainActivity.this);
+                    }
+
+
+                    FirebaseDatabase.getInstance().getReference().child("settings").child("gameRunning").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Log.i(TAG, "onDataChange: ");
+                            if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+                                boolean gameRunning = dataSnapshot.getValue(Boolean.class);
+                                if (gameRunning) {
+                                    if (ViewUtils.completeShowing) {
+                                        ViewUtils.removeDialog();
+                                        ViewUtils.completeShowing = false;
+                                    }
+                                } else {
+                                    ViewUtils.showCompleteDialog(MainActivity.this);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
                 @Override
@@ -133,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             });
 
         } else {
-            CoupleManager.syncWithServer(this);
+            new CoupleManager(MainActivity.this).syncWithServer(this);
             ViewUtils.showToast(MainActivity.this, "Some error occured!", ViewUtils.DURATION_SHORT);
         }
 
@@ -141,23 +180,27 @@ public class MainActivity extends AppCompatActivity implements Constants {
         levelRecycler.setLayoutManager(linearLayoutManagerThree);
         levelRecycler.setHasFixedSize(true);
         levelRecycler.setLayoutFrozen(true);
+
     }
 
     void startTimer() {
         if (timeRemaining == 0)
             timeRemaining = Constants.timeLimit;
-        countDownTimer = new CountDownTimer(timeRemaining, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
+        if (timer == null) {
+            timer = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (appRunning)
+                        try {
+                            Thread.sleep(30000);
+                            refreshClock(timeLimit);
+                        } catch (Exception e) {
 
-            }
-
-            @Override
-            public void onFinish() {
-//                ViewUtils.showCompleteDialog(MainActivity.this);
-            }
-        };
-        countDownTimer.start();
+                        }
+                }
+            });
+            timer.start();
+        }
     }
 
     void attachCoupleListener() {
@@ -175,18 +218,55 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
                     }
                 });
+
+        locationManager.fetchPartnerLocation().setOnLocationChangeListener(new LocationManager.OnLocationChangedListener() {
+            @Override
+            public void onLocationChanged(LatLng location) {
+                map.setPartnerLocation(location);
+            }
+
+            @Override
+            public void onErrorOccured(String message) {
+
+            }
+        });
+
+//        couplesRef
+//                .child(coupleId)
+//                .addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        if (dataSnapshot != null && dataSnapshot.getValue() != null)
+//                            setCurrentCouple(dataSnapshot.getValue(Couple.class));
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+
     }
 
     public void setCurrentCouple(Couple currentCouple) {
         this.currentCouple = currentCouple;
         refreshClock(currentCouple.getTimeLimit());
         timeLimit = currentCouple.getTimeLimit();
-        setLevelRecycler();
         setupBottomPager();
+        if (currentLevel != currentCouple.getCurrentLevel() || currentLevel == 0)
+            setLevelRecycler();
         bottomPager.setCurrentItem(currentCouple.getCurrentLevel() - 1, true);
-        if (currentCouple.getCurrentLevel() - currentLevel == 1) {
-            refreshMap();
+        refreshMap();
+
+        if (!currentCouple.isEnabled()) {
+            ViewUtils.showCompleteDialog(MainActivity.this);
+        } else {
+            if (ViewUtils.completeShowing) {
+                ViewUtils.removeDialog();
+                ViewUtils.completeShowing = false;
+            }
         }
+
         currentLevel = currentCouple.getCurrentLevel();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -198,20 +278,17 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     void refreshMap() {
         gameLocations = new ArrayList<>();
+        levelLatLng = new ArrayList<>();
         map.clearLandmarks();
         Level currentLevel = currentCouple.getLevels().get(currentCouple.getCurrentLevel() - 1);
         if (currentLevel.getLocations() != null)
             for (String location : currentLevel.getLocations()) {
+
                 switch (location) {
                     case sacBuildingText:
                         map.addLandmark(sacBuilding, R.drawable.marker_sac);
                         gameLocations.add(sacBuilding);
                         levelLatLng.add(sacBuilding);
-                        break;
-                    case cafeteriaText:
-                        map.addLandmark(cafeteria, R.drawable.marker_nescafe);
-                        gameLocations.add(cafeteria);
-                        levelLatLng.add(cafeteria);
                         break;
                     case mainBuildingText:
                         map.addLandmark(mainBuilding, R.drawable.marker_main_building);
@@ -219,13 +296,13 @@ public class MainActivity extends AppCompatActivity implements Constants {
                         levelLatLng.add(mainBuilding);
                         break;
                     case civilDeptText:
-                        map.addLandmark(civilDept, R.drawable.marker_main_building);
+                        map.addLandmark(civilDept, R.drawable.marker_civil);
                         gameLocations.add(civilDept);
                         levelLatLng.add(civilDept);
                         break;
                     case computerCentreText:
-//                    map.addLandmark(computerCentre, R.drawable.marker);
-//                    gameLocations.add(computerCentre);
+                        map.addLandmark(computerCentre, R.drawable.marker_cc);
+                        gameLocations.add(computerCentre);
                         levelLatLng.add(computerCentre);
                         break;
                     case tennisCourtText:
@@ -233,56 +310,55 @@ public class MainActivity extends AppCompatActivity implements Constants {
                         gameLocations.add(tennisCourt);
                         levelLatLng.add(tennisCourt);
                         break;
-                    case directorBungalowText:
-//                    map.addLandmark(directorBungalow, R.drawable.marker);
-//                    gameLocations.add(directorBungalow);
-                        levelLatLng.add(directorBungalow);
-                        break;
                     case guestHouseText:
-//                    map.addLandmark(guestHouse, R.drawable.marker);
-//                    gameLocations.add(guestHouse);
+                        map.addLandmark(guestHouse, R.drawable.marker_guest);
+                        gameLocations.add(guestHouse);
                         levelLatLng.add(guestHouse);
                         break;
-                    case mechanicalWorkshopText:
-//                    map.addLandmark(mechanicalWorkshop, R.drawable.marker);
-//                    gameLocations.add(mechanicalWorkshop);
-                        levelLatLng.add(mechanicalWorkshop);
-                        break;
                     case gangaHostelText:
+                        map.addLandmark(Constants.gangaHostel, R.drawable.marker_ganga);
+                        gameLocations.add(gangaHostel);
                         levelLatLng.add(gangaHostel);
                         break;
-                    case cseDeptText:
-                        levelLatLng.add(cseDept);
-                        break;
                     case CWRSText:
+                        map.addLandmark(Constants.CWRS, R.drawable.marker_cwrs);
+                        gameLocations.add(CWRS);
                         levelLatLng.add(CWRS);
                         break;
                     case canteenGopalJiText:
+                        map.addLandmark(Constants.canteenGopalJi, R.drawable.marker_gopal);
+                        gameLocations.add(canteenGopalJi);
                         levelLatLng.add(canteenGopalJi);
                         break;
                     case canteenShuklaJiText:
+                        map.addLandmark(Constants.canteenShuklaJi, R.drawable.marker_shukla);
+                        gameLocations.add(canteenShuklaJi);
                         levelLatLng.add(canteenShuklaJi);
                         break;
-                    case electricalDeptText:
-                        levelLatLng.add(electricalDept);
-                        break;
-                    case mechanicalDeptText:
-                        levelLatLng.add(mechanicalDept);
-                        break;
-                    case newElectricalDeptText:
-                        levelLatLng.add(newElectricalDept);
-                        break;
-                    case electronicsDeptText:
-                        levelLatLng.add(electronicsDept);
-                        break;
-                    case physicsDeptText:
-                        levelLatLng.add(physicsDept);
-                        break;
                     case groundText:
+                        map.addLandmark(Constants.ground, R.drawable.marker_ground);
+                        gameLocations.add(ground);
                         levelLatLng.add(ground);
                         break;
-                    case miniAuditoriumText:
-                        levelLatLng.add(miniAuditorium);
+                    case electricalDeptText:
+                        map.addLandmark(Constants.electricalDept, R.drawable.marker_electrical);
+                        gameLocations.add(electricalDept);
+                        levelLatLng.add(electricalDept);
+                        break;
+                    case cseDeptText:
+                        map.addLandmark(Constants.cseDept, R.drawable.marker_cse);
+                        gameLocations.add(cseDept);
+                        levelLatLng.add(cseDept);
+                        break;
+                    case electronicsDeptText:
+                        map.addLandmark(Constants.electronicsDept, R.drawable.marker_ec);
+                        gameLocations.add(electronicsDept);
+                        levelLatLng.add(electronicsDept);
+                        break;
+                    case directorBungalowText:
+                        map.addLandmark(directorBungalow, R.drawable.marker_director);
+                        gameLocations.add(directorBungalow);
+                        levelLatLng.add(directorBungalow);
                         break;
                 }
             }
@@ -291,12 +367,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     void setLevelRecycler() {
         if (currentCouple == null)
             return;
-//        if (currentCouple.getLevels() != null) {
-//            if (levelRecycler.getAdapter() == null)
-                levelRecycler.setAdapter(new LevelsAdapter(MainActivity.this, currentCouple.getLevels(), currentCouple.getCurrentLevel()));
-//            else
-//                ((LevelsAdapter) levelRecycler.getAdapter()).levelSetter(currentCouple.getCurrentLevel());
-//        }
+        levelRecycler.setAdapter(new LevelsAdapter(MainActivity.this, currentCouple.getLevels(), currentCouple.getCurrentLevel()));
         smoothScroller.setTargetPosition(currentCouple.getCurrentLevel() - 1);
         linearLayoutManagerThree.startSmoothScroll(smoothScroller);
     }
@@ -341,7 +412,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 countDownTimer.onFinish();
             }
         }
-        time.setText(timeRemaining / 60 / 60 + ":" + timeRemaining / 60 % 60 + " HOURS REMAINING");
+        time.setText(timeRemaining / 60 / 60 + ":" +
+                timeRemaining / 60 % 60 + " HOURS REMAINING");
     }
 
     @Override
@@ -349,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
         super.onPause();
         map.disableGPS();
         appRunning = false;
+        Log.i(TAG, "onPause: ");
     }
 
     @Override
@@ -502,9 +575,9 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     }
 
-    public boolean checkDistance(){
+    public boolean checkDistance() {
 
-        return LocationManager.distance(levelLatLng,map.getMyLocation().getLatitude(),map.getMyLocation().getLongitude());
+        return LocationManager.distance(levelLatLng, map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
     }
 
 }

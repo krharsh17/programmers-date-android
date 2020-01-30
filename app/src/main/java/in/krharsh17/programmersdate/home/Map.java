@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import java.util.Objects;
 
 import in.krharsh17.programmersdate.Constants;
 import in.krharsh17.programmersdate.R;
+import in.krharsh17.programmersdate.home.managers.LocationManager;
 
 
 public class Map extends Fragment implements OnMapReadyCallback, Constants {
@@ -169,6 +171,8 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
     public void onStart() {
         super.onStart();
 
+        final LocationManager locationManager = new LocationManager(getContext());
+
         mainActivity = (MainActivity) getActivity();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
@@ -195,6 +199,7 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
                 if (myLocation != null)
                     focusMap(myLocation.getLatitude(), myLocation.getLongitude());
                 showPresentLocations();
+                locationManager.writeUserLocation(myLocation.getLatitude(), myLocation.getLongitude());
             }
         };
         enableGPS();
@@ -352,10 +357,19 @@ public class Map extends Fragment implements OnMapReadyCallback, Constants {
         }
     }
 
-    private void showMarkers(MarkerOptions... markers) {
+    private void showMarkers(final MarkerOptions... markers) {
         for (int i = 0; i < markers.length; i++) {
-            if (markers[i] != null)
-                this.markers[i] = map.addMarker(markers[i]);
+            if (map != null) {
+                if (markers[i] != null)
+                    this.markers[i] = map.addMarker(markers[i]);
+            } else {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showMarkers(markers);
+                    }
+                }, 2000);
+            }
         }
     }
 }
